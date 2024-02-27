@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Documentation API REST Environnementale</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        .api-method {
+            padding: 0.5em;
+            margin: 0.5em 0;
+            border-left: 5px solid #49cc90;
+        }
+
+        details > summary {
+            cursor: pointer;
+            padding: 0.5em;
+            margin: 0.5em 0;
+            border-left: 5px solid #49cc90;
+        }
+
+        details > p {
+            padding-left: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="container-fluid">
+        <ul>
+            <li><strong>API Documentation</strong></li>
+        </ul>
+        <ul>
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#" role="button">Contact</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+        <div class="grid">
+            <section>
+                <hgroup>
+                    <h2>API REST SAE 4.01</h2>
+                    <h3>Endpoints pour interroger la base de données</h3>
+                </hgroup>
+                <details>
+                    <summary>Récupération des Stations</summary>
+                    <p>GET /stations</p>
+                </details>
+                <details>
+                    <summary>Récupération des Polluants</summary>
+                    <p>GET /pollutants</p>
+                </details>
+                <details>
+                    <summary>Récupération des Centres Régionaux</summary>
+                    <p>GET /regional_centers</p>
+                </details>
+                <details>
+                    <summary>Récupération des Mesures pour une Station Spécifique</summary>
+                    <p>GET /measurements?station_id={station_id}</p>
+                </details>
+                <details>
+                    <summary>Récupération des Mesures pour un Polluant Spécifique</summary>
+                    <p>GET /measurements?pollutant_id={pollutant_id}</p>
+                </details>
+                <details>
+                    <summary>Récupération des Mesures pour une Période Spécifique</summary>
+                    <p>GET /measurements?station_id={station_id}&start_date={yyyy-mm-dd}&end_date={yyyy-mm-dd}</p>
+                </details>
+                <details>
+                    <summary>Récupération de la Moyenne Journalière pour un Polluant Spécifique</summary>
+                    <p>GET /daily_average?pollutant_id={pollutant_id}&date={yyyy-mm-dd}</p>
+                </details>
+                <details>
+                    <summary>Récupération de la Moyenne Journalière pour tous les Polluants sur une Station</summary>
+                    <p>GET /daily_average?station_id={station_id}&date={yyyy-mm-dd}</p>
+                </details>
+                <details>
+                    <summary>Récupération du Maximum et Minimum pour un Polluant Spécifique sur une Période</summary>
+                    <p>GET /range?pollutant_id={pollutant_id}&start_date={yyyy-mm-dd}&end_date={yyyy-mm-dd}</p>
+                </details>
+                <details>
+                    <summary>Récupération des Mesures pour une Station, un Polluant et une Date Précise</summary>
+                    <p>GET /measurements?station_id={station_id}&pollutant_id={pollutant_id}&date={yyyy-mm-dd}</p>
+                </details>
+            </section>
+        </div>
+    </main>
+    <footer class="container">
+        <small><a href="#">Politique de confidentialité</a> • <a href="#">Conditions d'utilisation</a> • <a href="#">Tarpez</a></small>
+    </footer>
+</body>
+
+</html>
