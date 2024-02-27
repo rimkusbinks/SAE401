@@ -41,3 +41,5 @@ Assurez-vous que votre base de données est configurée et accessible par le scr
 ## Contribution
 
 Les contributions au projet SAE 4.01 sont les bienvenues. Veuillez vous assurer de suivre le style de code et les lignes directrices de contribution du projet.
+
+*Partie API REST à venir*
