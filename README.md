@@ -1,6 +1,3 @@
-Je m'excuse pour l'erreur. Voici la correction :
-
-```markdown
 # SAE 4.01
 
 ## Introduction
@@ -18,15 +15,15 @@ SAE 4.01 est un projet de gestion et d'analyse de données environnementales, ax
 Clonez le dépôt et installez les bibliothèques Python requises en utilisant :
 
 ```bash
-pip install requests pandas sqlite3
+pip install requests pandas sqlite3 ssl datetime
 ```
 
 ## Configuration de la base de données
 
-Avant d'exécuter le script d'importation, configurez votre base de données à l'aide du fichier schema.sql. Ce fichier contient des commandes SQL pour créer les tables nécessaires au stockage des données sur la pollution. Pour créer la base de données, exécutez :
+Avant d'exécuter le script d'importation, configurez votre base de données à l'aide du fichier schema.sql. Ce fichier contient des commandes SQL pour créer les tables nécessaires au stockage des données sur la pollution. Pour créer la base de données, à la racide de votre clone git, dans un dossier "database", exécutez :
 
 ```sql
-sqlite3 NomDeVotreBaseDeDonnees.db < schema.sql
+sqlite3 SAE401.db < schema.sql
 ```
 
 ## Instructions d'importation des données
@@ -44,4 +41,3 @@ Assurez-vous que votre base de données est configurée et accessible par le scr
 ## Contribution
 
 Les contributions au projet SAE 4.01 sont les bienvenues. Veuillez vous assurer de suivre le style de code et les lignes directrices de contribution du projet.
-```
