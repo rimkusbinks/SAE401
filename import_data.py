@@ -75,25 +75,25 @@ def get_or_create_type_valeur_id(conn, type_valeur):
         conn.commit()
         return cursor.lastrowid
 
-def get_or_create_zas_id(conn, Code_Zas, Nom_Zas):
+def get_or_create_zas_id(conn, Id_Organisme, Code_Zas, Nom_Zas):
     cursor = conn.cursor()
     cursor.execute("SELECT Id_Zas FROM Zas WHERE Code_Zas = ?", (Code_Zas,))
     zas_id = cursor.fetchone()
     if zas_id:
         return zas_id[0]
     else:
-        cursor.execute("INSERT INTO Zas (Code_Zas, Nom_Zas) VALUES (?,?)", (Code_Zas, Nom_Zas))
+        cursor.execute("INSERT INTO Zas (Id_Organisme, Code_Zas, Nom_Zas) VALUES (?,?,?)", (Id_Organisme, Code_Zas, Nom_Zas))
         conn.commit()
         return cursor.lastrowid
 
-def get_or_create_station_id(conn, Nom_Site, Code_Site, Type_Implantation):
+def get_or_create_station_id(conn, Id_Zas, Nom_Site, Code_Site, Type_Implantation):
     cursor = conn.cursor()
     cursor.execute("SELECT Id_Station FROM Stations WHERE Code_Site = ?", (Code_Site,))
     station_id = cursor.fetchone()
     if station_id:
         return station_id[0]
     else:
-        cursor.execute("INSERT INTO Stations (Code_Site, Nom_Site, Type_Implantation) VALUES (?,?,?)", (Code_Site, Nom_Site, Type_Implantation))
+        cursor.execute("INSERT INTO Stations (Id_Zas, Code_Site, Nom_Site, Type_Implantation) VALUES (?,?,?,?)", (Id_Zas, Code_Site, Nom_Site, Type_Implantation))
 
 def get_or_create_discriminant_id(conn, discriminant):
     cursor = conn.cursor()
@@ -120,7 +120,6 @@ def get_or_create_reglementaire_id(conn, reglementaire):
 def insert_mesures(conn, df):
     cursor = conn.cursor()
     for index, row in df.iterrows():
-        id_station = get_or_create_station_id(conn, row['nom site'], row['code site'], row['type d\'implantation']) if pd.notnull(row['nom site']) and row['nom site'] != '' else None and pd.notnull(row['code site']) and row['code site'] != '' and pd.notnull(row['type d\'implantation']) and row['type d\'implantation'] != ''
         id_polluant = get_or_create_polluant_id(conn, row['Polluant'])
         id_type_influence = get_or_create_type_influence_id(conn, row['type d\'influence']) if pd.notnull(row['type d\'influence']) and row['type d\'influence'] != '' else None
         id_type_evaluation = get_or_create_type_evaluation_id(conn, row['type d\'évaluation']) if pd.notnull(row['type d\'évaluation']) and row['type d\'évaluation'] != '' else None
@@ -129,7 +128,8 @@ def insert_mesures(conn, df):
         id_discriminant = get_or_create_discriminant_id(conn, row['discriminant']) if pd.notnull(row['discriminant']) and row['discriminant'] != '' else None
         id_reglementaire = get_or_create_reglementaire_id(conn, row['Réglementaire']) if pd.notnull(row['Réglementaire']) and row['Réglementaire'] != '' else None
         id_organisme = get_or_create_organisme_id(conn, row['Organisme']) if pd.notnull(row['Organisme']) and row['Organisme'] != '' else None
-        id_zas = get_or_create_zas_id(conn, row['Zas'], row['code zas']) if pd.notnull(row['Zas']) and row['Zas'] != '' and pd.notnull(row['code zas']) and row['code zas'] != '' else None
+        id_zas = get_or_create_zas_id(conn, id_organisme, row['Zas'], row['code zas']) if pd.notnull(row['Zas']) and row['Zas'] != '' and pd.notnull(row['code zas']) and row['code zas'] != '' else None
+        id_station = get_or_create_station_id(conn, id_zas, row['nom site'], row['code site'], row['type d\'implantation']) if pd.notnull(row['nom site']) and row['nom site'] != '' else None and pd.notnull(row['code site']) and row['code site'] != '' and pd.notnull(row['type d\'implantation']) and row['type d\'implantation'] != ''
         date_debut = row['Date de début']
         date_fin = row['Date de fin']
         valeur = row['valeur']
