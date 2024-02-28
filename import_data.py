@@ -3,6 +3,8 @@ import pandas as pd
 import sqlite3
 import ssl
 from datetime import datetime, timedelta
+# import du time pour le temps d'attente de chaque importation
+import time
 
 # Désactiver la vérification SSL
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -118,16 +120,16 @@ def get_or_create_reglementaire_id(conn, reglementaire):
 def insert_mesures(conn, df):
     cursor = conn.cursor()
     for index, row in df.iterrows():
-        id_station = get_or_create_station_id(conn, row['nom site'] if pd.notnull(row['nom site']) else None, row['code site'] if pd.notnull(row['code site']) else None, row['type d\'implantation'] if pd.notnull(row['type d\'implantation']) else None)
-        id_polluant = get_or_create_polluant_id(conn, row['Polluant'] if pd.notnull(row['Polluant']) else None)
-        id_type_influence = get_or_create_type_influence_id(conn, row['type d\'influence'] if pd.notnull(row['type d\'influence']) else None)
-        id_type_evaluation = get_or_create_type_evaluation_id(conn, row['type d\'évaluation'] if pd.notnull(row['type d\'évaluation']) else None)
-        id_procedure_mesure = get_or_create_procedure_mesure_id(conn, row['procédure de mesure'] if pd.notnull(row['procédure de mesure']) else None)
-        id_type_valeur = get_or_create_type_valeur_id(conn, row['type de valeur'] if pd.notnull(row['type de valeur']) else None)
-        id_discriminant = get_or_create_discriminant_id(conn, row['discriminant'] if pd.notnull(row['discriminant']) else None)
-        id_reglementaire = get_or_create_reglementaire_id(conn, row['Réglementaire'] if pd.notnull(row['Réglementaire']) else None)
-        id_organisme = get_or_create_organisme_id(conn, row['Organisme'] if pd.notnull(row['Organisme']) else None)
-        id_zas = get_or_create_zas_id(conn, row['Zas'] if pd.notnull(row['Zas']) else None, row['code zas'] if pd.notnull(row['code zas']) else None)
+        id_station = get_or_create_station_id(conn, row['nom site'], row['code site'], row['type d\'implantation']) if pd.notnull(row['nom site']) and row['nom site'] != '' else None and pd.notnull(row['code site']) and row['code site'] != '' and pd.notnull(row['type d\'implantation']) and row['type d\'implantation'] != ''
+        id_polluant = get_or_create_polluant_id(conn, row['Polluant'])
+        id_type_influence = get_or_create_type_influence_id(conn, row['type d\'influence']) if pd.notnull(row['type d\'influence']) and row['type d\'influence'] != '' else None
+        id_type_evaluation = get_or_create_type_evaluation_id(conn, row['type d\'évaluation']) if pd.notnull(row['type d\'évaluation']) and row['type d\'évaluation'] != '' else None
+        id_procedure_mesure = get_or_create_procedure_mesure_id(conn, row['procédure de mesure']) if pd.notnull(row['procédure de mesure']) and row['procédure de mesure'] != '' else None
+        id_type_valeur = get_or_create_type_valeur_id(conn, row['type de valeur']) if pd.notnull(row['type de valeur']) and row['type de valeur'] != '' else None
+        id_discriminant = get_or_create_discriminant_id(conn, row['discriminant']) if pd.notnull(row['discriminant']) and row['discriminant'] != '' else None
+        id_reglementaire = get_or_create_reglementaire_id(conn, row['Réglementaire']) if pd.notnull(row['Réglementaire']) and row['Réglementaire'] != '' else None
+        id_organisme = get_or_create_organisme_id(conn, row['Organisme']) if pd.notnull(row['Organisme']) and row['Organisme'] != '' else None
+        id_zas = get_or_create_zas_id(conn, row['Zas'], row['code zas']) if pd.notnull(row['Zas']) and row['Zas'] != '' and pd.notnull(row['code zas']) and row['code zas'] != '' else None
         date_debut = row['Date de début']
         date_fin = row['Date de fin']
         valeur = row['valeur']
@@ -148,17 +150,22 @@ def import_data():
     current_year = datetime.now().year
     years = [str(year) for year in range(current_year - 3, current_year + 1)]
 
+    # on lance un chrono pour voir le temps d'une importation toutes les années
+    start_time_import_all_years = time.time()
+
     # Lire le fichier CSV pour chaque jour de chaque année
     for year in years:
         end_date = min(datetime.now(), datetime(int(year), 12, 31))
         current_date = datetime(int(year), 1, 1)
 
+        #on lance un chrono pour voir le temps d'une importation pour une année
+        start_time_import_year = time.time()
         while current_date <= end_date:
             file_name = f"FR_E2_{current_date.strftime('%Y-%m-%d')}.csv"
             url_csv = f"https://files.data.gouv.fr/lcsqa/concentrations-de-polluants-atmospheriques-reglementes/temps-reel/{year}/{file_name}"
 
             try:
-                db_name = "SAE401.db"
+                db_name = "ptittest.db"
                 conn = sqlite3.connect("database/" + db_name)
                 response = requests.head(url_csv, timeout=5)
                 response.raise_for_status()
@@ -166,12 +173,21 @@ def import_data():
                 # Insérer les données dans la base de données
                 print(f"Importation des données pour la date {current_date.strftime('%Y-%m-%d')}...")
                 insert_mesures(conn, df)
+                # on lance un chrono pour voir le temps d'une importation
+                start_time_import_day = time.time()
                 print(f"Importation des données pour la date {current_date.strftime('%Y-%m-%d')} terminée.")
+                print(" %s secondes" % (time.time() - start_time_import_day))
             except Exception as e:
                 print(f"Erreur lors de l'importation des données pour le fichier {file_name} : {e}")
 
             current_date += timedelta(days=1)
             conn.close()
+
+        print(f"Importation des données pour l'année {year} terminée.")
+        print(" %s secondes prit" % (time.time() - start_time_import_year))
+
+    print(f"Importation des données pour toutes les années terminée.")
+    print(" %s secondes prit" % (time.time() - start_time_import_all_years))
 
 if __name__ == "__main__":
     import_data()
