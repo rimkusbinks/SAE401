@@ -165,7 +165,7 @@ def import_data():
             url_csv = f"https://files.data.gouv.fr/lcsqa/concentrations-de-polluants-atmospheriques-reglementes/temps-reel/{year}/{file_name}"
 
             try:
-                db_name = "ptittest.db"
+                db_name = "SAE401.db"
                 conn = sqlite3.connect("database/" + db_name)
                 response = requests.head(url_csv, timeout=5)
                 response.raise_for_status()
