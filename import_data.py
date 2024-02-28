@@ -118,16 +118,16 @@ def get_or_create_reglementaire_id(conn, reglementaire):
 def insert_mesures(conn, df):
     cursor = conn.cursor()
     for index, row in df.iterrows():
-        id_station = get_or_create_station_id(conn, row['nom site'], row['code site'], row['type d\'implantation'])
-        id_polluant = get_or_create_polluant_id(conn, row['Polluant'])
-        id_type_influence = get_or_create_type_influence_id(conn, row['type d\'influence'])
-        id_type_evaluation = get_or_create_type_evaluation_id(conn, row['type d\'évaluation'])
-        id_procedure_mesure = get_or_create_procedure_mesure_id(conn, row['procédure de mesure'])
-        id_type_valeur = get_or_create_type_valeur_id(conn, row['type de valeur'])
-        id_discriminant = get_or_create_discriminant_id(conn, row['discriminant'])
-        id_reglementaire = get_or_create_reglementaire_id(conn, row['Réglementaire'])
-        id_organisme = get_or_create_organisme_id(conn, row['Organisme'])
-        id_zas = get_or_create_zas_id(conn, row['Zas'], row['code zas'])
+        id_station = get_or_create_station_id(conn, row['nom site'] if pd.notnull(row['nom site']) else None, row['code site'] if pd.notnull(row['code site']) else None, row['type d\'implantation'] if pd.notnull(row['type d\'implantation']) else None)
+        id_polluant = get_or_create_polluant_id(conn, row['Polluant'] if pd.notnull(row['Polluant']) else None)
+        id_type_influence = get_or_create_type_influence_id(conn, row['type d\'influence'] if pd.notnull(row['type d\'influence']) else None)
+        id_type_evaluation = get_or_create_type_evaluation_id(conn, row['type d\'évaluation'] if pd.notnull(row['type d\'évaluation']) else None)
+        id_procedure_mesure = get_or_create_procedure_mesure_id(conn, row['procédure de mesure'] if pd.notnull(row['procédure de mesure']) else None)
+        id_type_valeur = get_or_create_type_valeur_id(conn, row['type de valeur'] if pd.notnull(row['type de valeur']) else None)
+        id_discriminant = get_or_create_discriminant_id(conn, row['discriminant'] if pd.notnull(row['discriminant']) else None)
+        id_reglementaire = get_or_create_reglementaire_id(conn, row['Réglementaire'] if pd.notnull(row['Réglementaire']) else None)
+        id_organisme = get_or_create_organisme_id(conn, row['Organisme'] if pd.notnull(row['Organisme']) else None)
+        id_zas = get_or_create_zas_id(conn, row['Zas'] if pd.notnull(row['Zas']) else None, row['code zas'] if pd.notnull(row['code zas']) else None)
         date_debut = row['Date de début']
         date_fin = row['Date de fin']
         valeur = row['valeur']
