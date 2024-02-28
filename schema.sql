@@ -57,6 +57,16 @@ CREATE TABLE Types_Valeur (
     Nom_Types_Valeur TEXT UNIQUE -- type de valeur
 );
 
+CREATE TABLE Reglementaires (
+    Id_Reglementaire INTEGER PRIMARY KEY,
+    Nom_Reglementaire TEXT UNIQUE -- Réglémentaire
+);
+
+CREATE TABLE Discriminants (
+    Id_Discriminant INTEGER PRIMARY KEY,
+    Nom_Discriminant TEXT UNIQUE -- discriminant
+);
+
 CREATE TABLE Mesures (
     Id_Mesure INTEGER PRIMARY KEY,
     Id_Station INTEGER,
@@ -89,14 +99,4 @@ CREATE TABLE Mesures (
     FOREIGN KEY (Id_Reglementaire) REFERENCES Reglementaires(Id_Reglementaire),
     FOREIGN KEY (Id_Organisme) REFERENCES Organismes(Id_Organisme),
     FOREIGN KEY (Id_Zas) REFERENCES Zas(Id_Zas)
-);
-
-CREATE TABLE Reglementaires (
-    Id_Reglementaire INTEGER PRIMARY KEY,
-    Nom_Reglementaire TEXT UNIQUE -- Réglémentaire
-);
-
-CREATE TABLE Discriminants (
-    Id_Discriminant INTEGER PRIMARY KEY,
-    Nom_Discriminant TEXT UNIQUE -- discriminant
 );
