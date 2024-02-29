@@ -11,67 +11,67 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 def get_or_create_polluant_id(conn, polluant):
     cursor = conn.cursor()
-    cursor.execute("SELECT Id_Polluant FROM Polluants WHERE Nom_Polluant = ?", (polluant,))
+    cursor.execute("SELECT Id_Polluant FROM Polluants WHERE Polluant = ?", (polluant,))
     polluant_id = cursor.fetchone()
     if polluant_id:
         return polluant_id[0]
     else:
-        cursor.execute("INSERT INTO Polluants (Nom_Polluant) VALUES (?)", (polluant,))
+        cursor.execute("INSERT INTO Polluants (Polluant) VALUES (?)", (polluant,))
         conn.commit()
         return cursor.lastrowid
 
 def get_or_create_organisme_id(conn, organisme):
     cursor = conn.cursor()
-    cursor.execute("SELECT Id_Organisme FROM Organismes WHERE Nom_Organisme = ?", (organisme,))
+    cursor.execute("SELECT Id_Organisme FROM Organismes WHERE Organisme = ?", (organisme,))
     organisme_id = cursor.fetchone()
     if organisme_id:
         return organisme_id[0]
     else:
-        cursor.execute("INSERT INTO Organismes (Nom_Organisme) VALUES (?)", (organisme,))
+        cursor.execute("INSERT INTO Organismes (Organisme) VALUES (?)", (organisme,))
         conn.commit()
         return cursor.lastrowid
 
 def get_or_create_type_influence_id(conn, type_influence):
     cursor = conn.cursor()
-    cursor.execute("SELECT Id_Type_Influence FROM Types_Influence WHERE Nom_Type_Influence = ?", (type_influence,))
+    cursor.execute("SELECT Id_Type_Influence FROM Types_Influence WHERE Type_Influence = ?", (type_influence,))
     type_influence_id = cursor.fetchone()
     if type_influence_id:
         return type_influence_id[0]
     else:
-        cursor.execute("INSERT INTO Types_Influence (Nom_Type_Influence) VALUES (?)", (type_influence,))
+        cursor.execute("INSERT INTO Types_Influence (Type_Influence) VALUES (?)", (type_influence,))
         conn.commit()
         return cursor.lastrowid
 
 def get_or_create_type_evaluation_id(conn, type_evaluation):
     cursor = conn.cursor()
-    cursor.execute("SELECT Id_Type_Evaluation FROM Types_Evaluation WHERE Nom_Type_Evaluation = ?", (type_evaluation,))
+    cursor.execute("SELECT Id_Type_Evaluation FROM Types_Evaluation WHERE Type_Evaluation = ?", (type_evaluation,))
     type_evaluation_id = cursor.fetchone()
     if type_evaluation_id:
         return type_evaluation_id[0]
     else:
-        cursor.execute("INSERT INTO Types_Evaluation (Nom_Type_Evaluation) VALUES (?)", (type_evaluation,))
+        cursor.execute("INSERT INTO Types_Evaluation (Type_Evaluation) VALUES (?)", (type_evaluation,))
         conn.commit()
         return cursor.lastrowid
 
 def get_or_create_procedure_mesure_id(conn, procedure_mesure):
     cursor = conn.cursor()
-    cursor.execute("SELECT Id_Procedure_Mesure FROM Procedures_Mesure WHERE Nom_Procedure_Mesure = ?", (procedure_mesure,))
+    cursor.execute("SELECT Id_Procedure_Mesure FROM Procedures_Mesure WHERE Procedure_Mesure = ?", (procedure_mesure,))
     procedure_mesure_id = cursor.fetchone()
     if procedure_mesure_id:
         return procedure_mesure_id[0]
     else:
-        cursor.execute("INSERT INTO Procedures_Mesure (Nom_Procedure_Mesure) VALUES (?)", (procedure_mesure,))
+        cursor.execute("INSERT INTO Procedures_Mesure (Procedure_Mesure) VALUES (?)", (procedure_mesure,))
         conn.commit()
         return cursor.lastrowid
 
 def get_or_create_type_valeur_id(conn, type_valeur):
     cursor = conn.cursor()
-    cursor.execute("SELECT Id_Type_Valeur FROM Types_Valeur WHERE Nom_Types_Valeur = ?", (type_valeur,))
+    cursor.execute("SELECT Id_Type_Valeur FROM Types_Valeur WHERE Type_Valeur = ?", (type_valeur,))
     type_valeur_id = cursor.fetchone()
     if type_valeur_id:
         return type_valeur_id[0]
     else:
-        cursor.execute("INSERT INTO Types_Valeur (Nom_Types_Valeur) VALUES (?)", (type_valeur,))
+        cursor.execute("INSERT INTO Types_Valeur (Type_Valeur) VALUES (?)", (type_valeur,))
         conn.commit()
         return cursor.lastrowid
 
@@ -97,23 +97,34 @@ def get_or_create_station_id(conn, Id_Zas, Nom_Site, Code_Site, Type_Implantatio
 
 def get_or_create_discriminant_id(conn, discriminant):
     cursor = conn.cursor()
-    cursor.execute("SELECT Id_Discriminant FROM Discriminants WHERE Nom_Discriminant = ?", (discriminant,))
+    cursor.execute("SELECT Id_Discriminant FROM Discriminants WHERE Discriminant = ?", (discriminant,))
     discriminant_id = cursor.fetchone()
     if discriminant_id:
         return discriminant_id[0]
     else:
-        cursor.execute("INSERT INTO Discriminants (Nom_Discriminant) VALUES (?)", (discriminant,))
+        cursor.execute("INSERT INTO Discriminants (Discriminant) VALUES (?)", (discriminant,))
         conn.commit()
         return cursor.lastrowid
-
-def get_or_create_reglementaire_id(conn, reglementaire):
+    
+def get_or_create_unite_mesure_id(conn, unite_mesure):
     cursor = conn.cursor()
-    cursor.execute("SELECT Id_Reglementaire FROM Reglementaires WHERE Nom_Reglementaire = ?", (reglementaire,))
-    reglementaire_id = cursor.fetchone()
-    if reglementaire_id:
-        return reglementaire_id[0]
+    cursor.execute("SELECT Id_Unite_Mesure FROM Unites_Mesure WHERE Unite_Mesure = ?", (unite_mesure,))
+    unite_mesure_id = cursor.fetchone()
+    if unite_mesure_id:
+        return unite_mesure_id[0]
     else:
-        cursor.execute("INSERT INTO Reglementaires (Nom_Reglementaire) VALUES (?)", (reglementaire,))
+        cursor.execute("INSERT INTO Unites_Mesure (Unite_Mesure) VALUES (?)", (unite_mesure,))
+        conn.commit()
+        return cursor.lastrowid
+    
+def get_or_create_code_qualite_id(conn, code_qualite):
+    cursor = conn.cursor()
+    cursor.execute("SELECT Id_Code_Qualite FROM Codes_Qualite WHERE Code_Qualite = ?", (code_qualite,))
+    code_qualite_id = cursor.fetchone()
+    if code_qualite_id:
+        return code_qualite_id[0]
+    else:
+        cursor.execute("INSERT INTO Codes_Qualite (Code_Qualite) VALUES (?)", (code_qualite,))
         conn.commit()
         return cursor.lastrowid
     
@@ -126,23 +137,23 @@ def insert_mesures(conn, df):
         id_procedure_mesure = get_or_create_procedure_mesure_id(conn, row['procédure de mesure']) if pd.notnull(row['procédure de mesure']) and row['procédure de mesure'] != '' else None
         id_type_valeur = get_or_create_type_valeur_id(conn, row['type de valeur']) if pd.notnull(row['type de valeur']) and row['type de valeur'] != '' else None
         id_discriminant = get_or_create_discriminant_id(conn, row['discriminant']) if pd.notnull(row['discriminant']) and row['discriminant'] != '' else None
-        id_reglementaire = get_or_create_reglementaire_id(conn, row['Réglementaire']) if pd.notnull(row['Réglementaire']) and row['Réglementaire'] != '' else None
         id_organisme = get_or_create_organisme_id(conn, row['Organisme']) if pd.notnull(row['Organisme']) and row['Organisme'] != '' else None
         id_zas = get_or_create_zas_id(conn, id_organisme, row['code zas'], row['Zas']) if pd.notnull(row['Zas']) and row['Zas'] != '' and pd.notnull(row['code zas']) and row['code zas'] != '' else None
         id_station = get_or_create_station_id(conn, id_zas, row['nom site'], row['code site'], row['type d\'implantation']) if pd.notnull(row['nom site']) and row['nom site'] != '' else None and pd.notnull(row['code site']) and row['code site'] != '' and pd.notnull(row['type d\'implantation']) and row['type d\'implantation'] != ''
+        id_unite_mesure = get_or_create_unite_mesure_id(conn, row['unité de mesure']) if pd.notnull(row['unité de mesure']) and row['unité de mesure'] != '' else None
+        id_code_qualite = get_or_create_code_qualite_id(conn, row['code qualité']) if pd.notnull(row['code qualité']) and row['code qualité'] != '' else None
         date_debut = row['Date de début']
         date_fin = row['Date de fin']
         valeur = row['valeur']
         valeur_brute = row['valeur brute']
-        unite_mesure = row['unité de mesure']
         taux_saisie = row['taux de saisie']
         couverture_temporelle = row['couverture temporelle']
         couverture_donnees = row['couverture de données']
-        code_qualite = row['code qualité']
         validite = row['validité']
+        reglementaire = row['Réglementaire']
         cursor.execute("""
-            INSERT INTO Mesures (Id_Station, Id_Polluant, Id_Type_Influence, Id_Type_Evaluation, Id_Procedure, Id_Type_Valeur, Id_Discriminant, Id_Reglementaire, Id_Organisme, Id_Zas, Date_debut, Date_fin, Valeur, Valeur_Brute, Unite_Mesure, Taux_Saisie, Couverture_Temporelle, Couverture_Donnees, Code_Qualite, Validite) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-        """,                    (id_station, id_polluant, id_type_influence, id_type_evaluation, id_procedure_mesure, id_type_valeur, id_discriminant, id_reglementaire, id_organisme, id_zas, date_debut, date_fin, valeur, valeur_brute, unite_mesure, taux_saisie, couverture_temporelle, couverture_donnees, code_qualite, validite))
+            INSERT INTO Mesures (Id_Station, Id_Polluant, Id_Type_Influence, Id_Type_Evaluation, Id_Procedure_Mesure, Id_Type_Valeur, Id_Discriminant, Id_Organisme, Id_Zas, Id_Unite_Mesure, Id_code_qualite, Date_debut, Date_fin, Valeur, Valeur_Brute, Taux_Saisie, Couverture_Temporelle, Couverture_Donnees, Validite, Reglementaire) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        """,                    (id_station, id_polluant, id_type_influence, id_type_evaluation, id_procedure_mesure, id_type_valeur, id_discriminant, id_organisme, id_zas, id_unite_mesure, id_code_qualite, date_debut, date_fin, valeur, valeur_brute, taux_saisie, couverture_temporelle, couverture_donnees, validite, reglementaire))
     conn.commit()
 
 def import_data():
