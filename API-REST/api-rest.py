@@ -3,45 +3,38 @@ import sqlite3, datetime
 
 app = Flask(__name__)
 
-# si la méthode n'existe pas on retourne un message d'erreur
 @app.errorhandler(404)
 def page_not_found(e):
     return jsonify({'error': 'La méthode demandée n\'existe pas, referez-vous à la documentation pour plus d\'informations'}), 404
 
 def query_db(query, args=(), one=False):
     with sqlite3.connect("database/SAE401.db") as conn:
-        conn.text_factory = str  # Use UTF-8
-        conn.row_factory = sqlite3.Row  # This enables column access by name: row['column_name'] 
+        conn.text_factory = str
+        conn.row_factory = sqlite3.Row
         cur = conn.cursor()
         cur.execute(query, args)
-        rv = [dict(row) for row in cur.fetchall()]  # This will convert your row to a dict
+        rv = [dict(row) for row in cur.fetchall()]
         cur.close()
         return (rv[0] if rv else None) if one else rv
 
-# récupération des organismes
 @app.route('/organismes')
 def get_organismes():
-    print(" La méthode get_organismes a été appelée")
-    nom_organisme = request.args.get('nom_organisme')
+    organisme = request.args.get('organisme')
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
     offset = (page - 1) * per_page
     query = 'SELECT * FROM Organismes WHERE 1=1'
     params = []
-    if nom_organisme:
-        query += ' AND Nom_Organisme = ?'
-        params.append(nom_organisme)
+    if organisme:
+        query += ' AND Organisme = ?'
+        params.append(organisme)
     query += ' LIMIT ? OFFSET ?'
     params.extend([per_page, offset])
     result = query_db(query, params)
-    if result:
-        print("La requête a retourné des résultats")
     return jsonify(result)
 
-# récupération des zas
 @app.route('/zas')
 def get_zas():
-    print(" La méthode get_zas a été appelée")
     nom_zas = request.args.get('nom_zas')
     code_zas = request.args.get('code_zas')
     page = request.args.get('page', default=1, type=int)
@@ -58,14 +51,10 @@ def get_zas():
     query += ' LIMIT ? OFFSET ?'
     params.extend([per_page, offset])
     result = query_db(query, params)
-    if result:
-        print("La requête a retourné des résultats")
     return jsonify(result)
 
-# récupération des stations
 @app.route('/stations')
 def get_stations():
-    print(" La méthode get_stations a été appelée")
     nom_site = request.args.get('nom_site')
     code_site = request.args.get('code_site')
     page = request.args.get('page', default=1, type=int)
@@ -82,74 +71,58 @@ def get_stations():
     query += ' LIMIT ? OFFSET ?'
     params.extend([per_page, offset])
     result = query_db(query, params)
-    if result:
-        print("La requête a retourné des résultats")
     return jsonify(result)
 
-# récupération des polluants
 @app.route('/polluants')
 def get_polluants():
-    print(" La méthode get_polluants a été appelée")
-    nom_polluant = request.args.get('nom_polluant')
+    polluant = request.args.get('polluant')
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
     offset = (page - 1) * per_page
     query = 'SELECT * FROM Polluants WHERE 1=1'
     params = []
-    if nom_polluant:
-        query += ' AND Nom_Polluant = ?'
-        params.append(nom_polluant)
+    if polluant:
+        query += ' AND Polluant = ?'
+        params.append(polluant)
     query += ' LIMIT ? OFFSET ?'
     params.extend([per_page, offset])
     result = query_db(query, params)
-    if result:
-        print("La requête a retourné des résultats")
     return jsonify(result)
 
-# récupération des types influence
 @app.route('/types_influence')
 def get_types_influence():
-    print(" La méthode get_types_influence a été appelée")
-    nom_type_influence = request.args.get('nom_type_influence')
+    type_influence = request.args.get('type_influence')
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
     offset = (page - 1) * per_page
     query = 'SELECT * FROM Types_Influence WHERE 1=1'
     params = []
-    if nom_type_influence:
-        query += ' AND Nom_Type_Influence = ?'
-        params.append(nom_type_influence)
+    if type_influence:
+        query += ' AND Type_Influence = ?'
+        params.append(type_influence)
     query += ' LIMIT ? OFFSET ?'
     params.extend([per_page, offset])
     result = query_db(query, params)
-    if result:
-        print("La requête a retourné des résultats")
     return jsonify(result)
 
-# récupération des types evaluation
 @app.route('/types_evaluation')
 def get_types_evaluation():
-    print(" La méthode get_types_evaluation a été appelée")
-    nom_type_evaluation = request.args.get('nom_type_evaluation')
+    type_evaluation = request.args.get('type_evaluation')
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
     offset = (page - 1) * per_page
     query = 'SELECT * FROM Types_Evaluation WHERE 1=1'
     params = []
-    if nom_type_evaluation:
-        query += ' AND Nom_Type_Evaluation = ?'
-        params.append(nom_type_evaluation)
+    if type_evaluation:
+        query += ' AND Type_Evaluation = ?'
+        params.append(type_evaluation)
     query += ' LIMIT ? OFFSET ?'
     params.extend([per_page, offset])
     result = query_db(query, params)
-    if result:
-        print("La requête a retourné des résultats")
     return jsonify(result)
 
-# récupération des types mesure
 @app.route('/procedures_mesure')
 def get_procedures_mesure():
-    print(" La méthode get_procedures_mesure a été appelée")
     nom_procedure = request.args.get('nom_procedure')
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
@@ -157,74 +130,45 @@ def get_procedures_mesure():
     query = 'SELECT * FROM Procedures_Mesure WHERE 1=1'
     params = []
     if nom_procedure:
-        query += ' AND Nom_Procedure_Mesure = ?'
+        query += ' AND Procedure_Mesure = ?'
         params.append(nom_procedure)
     query += ' LIMIT ? OFFSET ?'
     params.extend([per_page, offset])
     result = query_db(query, params)
-    if result:
-        print("La requête a retourné des résultats")
     return jsonify(result)
 
-# récupération des types valeur
 @app.route('/types_valeur')
 def get_types_valeur():
-    print(" La méthode get_types_valeur a été appelée")
-    nom_type_valeur = request.args.get('nom_type_valeur')
+    type_valeur = request.args.get('type_valeur')
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
     offset = (page - 1) * per_page
     query = 'SELECT * FROM Types_Valeur WHERE 1=1'
     params = []
-    if nom_type_valeur:
-        query += ' AND Nom_Types_Valeur = ?'
-        params.append(nom_type_valeur)
+    if type_valeur:
+        query += ' AND Type_Valeur = ?'
+        params.append(type_valeur)
     query += ' LIMIT ? OFFSET ?'
     params.extend([per_page, offset])
     result = query_db(query, params)
-    if result:
-        print("La requête a retourné des résultats")
     return jsonify(result)
 
-# récupération des reglementations
-@app.route('/reglementations')
-def get_reglementations():
-    print(" La méthode get_reglementations a été appelée")
-    nom_reglementaire = request.args.get('nom_reglementaire')
-    page = request.args.get('page', default=1, type=int)
-    per_page = request.args.get('per_page', default=10, type=int)
-    offset = (page - 1) * per_page
-    query = 'SELECT * FROM Reglementaires WHERE 1=1'
-    params = []
-    if nom_reglementaire:
-        query += ' AND Nom_Reglementaire = ?'
-        params.append(nom_reglementaire)
-    query += ' LIMIT ? OFFSET ?'
-    params.extend([per_page, offset])
-    result = query_db(query, params)
-    if result:
-        print("La requête a retourné des résultats")
-    return jsonify(result)
-
-# récupération des reglementations
 @app.route('/discriminants')
 def get_discriminants():
-    print(" La méthode get_discriminants a été appelée")
-    nom_discriminant = request.args.get('nom_discriminant')
+    discriminant = request.args.get('discriminant')
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
     offset = (page - 1) * per_page
     query = 'SELECT * FROM Discriminants WHERE 1=1'
     params = []
-    if nom_discriminant:
-        query += ' AND Nom_Discriminant = ?'
-        params.append(nom_discriminant)
+    if discriminant:
+        query += ' AND Discriminant = ?'
+        params.append(discriminant)
     query += ' LIMIT ? OFFSET ?'
     params.extend([per_page, offset])
     result = query_db(query, params)
-    if result:
-        print("La requête a retourné des résultats")
     return jsonify(result)
+
 
 # récupération des mesures
 @app.route('/measurements')
