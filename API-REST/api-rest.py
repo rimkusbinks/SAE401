@@ -159,16 +159,32 @@ def get_measurements():
     pollutant_id = request.args.get('pollutant_id')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
-    query = '''
-        SELECT * FROM Mesures
-        WHERE Id_Station = ? AND Id_Polluant = ? AND Date_Debut >= ? AND Date_Fin <= ? LIMIT ? OFFSET ?
-    '''
-    result = query_db(query, (station_id, pollutant_id, start_date, end_date, per_page, offset))
+
+    query = 'SELECT * FROM Mesures WHERE 1=1'
+    params = []
+
+    if station_id:
+        query += ' AND Id_Station = ?'
+        params.append(station_id)
+    if pollutant_id:
+        query += ' AND Id_Polluant = ?'
+        params.append(pollutant_id)
+    if start_date:
+        query += ' AND Date_Debut >= ?'
+        params.append(start_date)
+    if end_date:
+        query += ' AND Date_Fin <= ?'
+        params.append(end_date)
+
+    query += ' LIMIT ? OFFSET ?'
+    params.extend([per_page, offset])
+
+    result = query_db(query, params)
     if result:
         print("La requête a retourné des résultats")
     return jsonify(result)
 
-# récupération des moyennes journalières
+# récupération des mesures
 @app.route('/daily_average')
 def get_daily_average():
     print(" La méthode get_daily_average a été appelée")
@@ -178,16 +194,31 @@ def get_daily_average():
     pollutant_id = request.args.get('pollutant_id')
     station_id = request.args.get('station_id')
     date = request.args.get('date')
-    query = '''
-        SELECT AVG(Valeur) as average FROM Mesures
-        WHERE Id_Polluant = ? AND Id_Station = ? AND Date_Debut = ? LIMIT ? OFFSET ?
-    '''
-    result = query_db(query, (pollutant_id, station_id, date, per_page, offset), one=True)
+    date_debut = date + ' 00:00:00'
+    date_fin = date + ' 23:59:59'
+
+    query = 'SELECT AVG(Valeur) as average FROM Mesures WHERE 1=1'
+    params = []
+
+    if pollutant_id:
+        query += ' AND Id_Polluant = ?'
+        params.append(pollutant_id)
+    if station_id:
+        query += ' AND Id_Station = ?'
+        params.append(station_id)
+    if date:
+        query += ' AND Date_Debut >= ? AND Date_Fin <= ?'
+        params.extend([date_debut, date_fin])
+
+    query += ' LIMIT ? OFFSET ?'
+    params.extend([per_page, offset])
+
+    result = query_db(query, params, one=True)
     if result:
         print("La requête a retourné des résultats")
     return jsonify(result)
 
-# récupération des moyennes horaires
+# récupération des mesures
 @app.route('/range')
 def get_range():
     print(" La méthode get_range a été appelée")
@@ -197,11 +228,24 @@ def get_range():
     pollutant_id = request.args.get('pollutant_id')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
-    query = '''
-        SELECT MIN(Valeur) as minimum, MAX(Valeur) as maximum FROM Mesures
-        WHERE Id_Polluant = ? AND Date_Debut >= ? AND Date_Fin <= ? LIMIT ? OFFSET ?
-    '''
-    result = query_db(query, (pollutant_id, start_date, end_date, per_page, offset), one=True)
+
+    query = 'SELECT MIN(Valeur) as minimum, MAX(Valeur) as maximum FROM Mesures WHERE 1=1'
+    params = []
+
+    if pollutant_id:
+        query += ' AND Id_Polluant = ?'
+        params.append(pollutant_id)
+    if start_date:
+        query += ' AND Date_Debut >= ?'
+        params.append(start_date)
+    if end_date:
+        query += ' AND Date_Fin <= ?'
+        params.append(end_date)
+
+    query += ' LIMIT ? OFFSET ?'
+    params.extend([per_page, offset])
+
+    result = query_db(query, params, one=True)
     if result:
         print("La requête a retourné des résultats")
     return jsonify(result)
