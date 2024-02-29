@@ -3,6 +3,9 @@ import sqlite3
 
 app = Flask(__name__)
 
+page = 1
+per_page = 10
+
 # si la méthode n'existe pas on retourne un message d'erreur
 @app.errorhandler(404)
 def page_not_found(e):
@@ -10,6 +13,7 @@ def page_not_found(e):
 
 def query_db(query, args=(), one=False):
     with sqlite3.connect("database/SAE401.db") as conn:
+        conn.text_factory = str  # Use UTF-8
         conn.row_factory = sqlite3.Row  # This enables column access by name: row['column_name'] 
         cur = conn.cursor()
         cur.execute(query, args)
