@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS Discriminants;
 
 CREATE TABLE Organismes (
     Id_Organisme INTEGER PRIMARY KEY,
-    Nom TEXT UNIQUE -- Organisme
+    Nom_Organisme TEXT UNIQUE -- Organisme
 );
 
 CREATE TABLE Zas (
