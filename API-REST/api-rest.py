@@ -3,6 +3,11 @@ import sqlite3
 
 app = Flask(__name__)
 
+# si la méthode n'existe pas on retourne un message d'erreur
+@app.errorhandler(404)
+def page_not_found(e):
+    return jsonify({'error': 'La méthode demandée n\'existe pas, referez-vous à la documentation pour plus d\'informations'}), 404
+
 def query_db(query, args=(), one=False):
     with sqlite3.connect("database/SAE401.db") as conn:
         conn.row_factory = sqlite3.Row  # This enables column access by name: row['column_name'] 
