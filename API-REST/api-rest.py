@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-import sqlite3
+import sqlite3, datetime
 
 app = Flask(__name__)
 
@@ -160,6 +160,11 @@ def get_measurements():
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
 
+    if start_date:
+        start_date = datetime.strptime(start_date, '%Y-%m-%dT%H:%M:%S').strftime('%Y/%m/%d %H:%M:%S')
+    if end_date:
+        end_date = datetime.strptime(end_date, '%Y-%m-%dT%H:%M:%S').strftime('%Y/%m/%d %H:%M:%S')
+
     query = 'SELECT * FROM Mesures WHERE 1=1'
     params = []
 
@@ -196,6 +201,11 @@ def get_daily_average():
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
 
+    if start_date:
+        start_date = datetime.strptime(start_date, '%Y-%m-%dT%H:%M:%S').strftime('%Y/%m/%d %H:%M:%S')
+    if end_date:
+        end_date = datetime.strptime(end_date, '%Y-%m-%dT%H:%M:%S').strftime('%Y/%m/%d %H:%M:%S')
+
     query = 'SELECT AVG(Valeur) as average FROM Mesures WHERE 1=1'
     params = []
 
@@ -227,6 +237,11 @@ def get_range():
     pollutant_id = request.args.get('pollutant_id')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
+
+    if start_date:
+        start_date = datetime.strptime(start_date, '%Y-%m-%dT%H:%M:%S').strftime('%Y/%m/%d %H:%M:%S')
+    if end_date:
+        end_date = datetime.strptime(end_date, '%Y-%m-%dT%H:%M:%S').strftime('%Y/%m/%d %H:%M:%S')
 
     query = 'SELECT MIN(Valeur) as minimum, MAX(Valeur) as maximum FROM Mesures WHERE 1=1'
     params = []
