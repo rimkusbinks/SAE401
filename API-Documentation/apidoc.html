@@ -95,33 +95,11 @@
                     <a href="http://127.0.0.1:5000/discriminants" target="_blank">http://127.0.0.1:5000/discriminants</a>
                 </details>
                 <details>
-                    <summary>Récupération des Mesures pour une station spécifique</summary>
-                    <p>GET /measurements?station_id={station_id}</p>
-                    <a href="http://127.0.0.1:5000/measurements?station_id=1" target="_blank">http://127.0.0.1:5000/measurements?station_id=1</a>
-                </details>
-                <details>
-                    <summary>Récupération des Mesures pour un polluant Spécifique</summary>
-                    <p>GET /measurements?pollutant_id={pollutant_id}</p>
-                </details>
-                <details>
-                    <summary>Récupération des Mesures pour une Période Spécifique</summary>
-                    <p>GET /measurements?station_id={station_id}&start_date={yyyy-mm-dd}&end_date={yyyy-mm-dd}</p>
-                </details>
-                <details>
-                    <summary>Récupération de la Moyenne Journalière pour un Polluant Spécifique</summary>
-                    <p>GET /daily_average?pollutant_id={pollutant_id}&date={yyyy-mm-dd}</p>
-                </details>
-                <details>
-                    <summary>Récupération de la Moyenne Journalière pour tous les Polluants sur une Station</summary>
-                    <p>GET /daily_average?station_id={station_id}&date={yyyy-mm-dd}</p>
-                </details>
-                <details>
-                    <summary>Récupération du Maximum et Minimum pour un Polluant Spécifique sur une Période</summary>
-                    <p>GET /range?pollutant_id={pollutant_id}&start_date={yyyy-mm-dd}&end_date={yyyy-mm-dd}</p>
-                </details>
-                <details>
-                    <summary>Récupération des Mesures pour une Station, un Polluant et une Date Précise</summary>
-                    <p>GET /measurements?station_id={station_id}&pollutant_id={pollutant_id}&date={yyyy-mm-dd}</p>
+                    <summary>Les arguments de requête</summary>
+                    <p>station_id: int</p> <p><i> Exemple : station_id=1</i></p>
+                    <p>polluant_id: int</p> <p><i> Exemple : polluant_id=1</i></p>
+                    <p>date_debut: date</p> <p><i>Exemple : date_debut=2021-01-01T02:00:00</i></p>
+                    <p>date_fin: date</p> <p><i> Exemple : date_fin=2021-01-01T03:00:00</i></p>
                 </details>
             </section>
         </div>

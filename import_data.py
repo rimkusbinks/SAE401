@@ -130,8 +130,8 @@ def insert_mesures(conn, df):
         id_organisme = get_or_create_organisme_id(conn, row['Organisme']) if pd.notnull(row['Organisme']) and row['Organisme'] != '' else None
         id_zas = get_or_create_zas_id(conn, id_organisme, row['Zas'], row['code zas']) if pd.notnull(row['Zas']) and row['Zas'] != '' and pd.notnull(row['code zas']) and row['code zas'] != '' else None
         id_station = get_or_create_station_id(conn, id_zas, row['nom site'], row['code site'], row['type d\'implantation']) if pd.notnull(row['nom site']) and row['nom site'] != '' else None and pd.notnull(row['code site']) and row['code site'] != '' and pd.notnull(row['type d\'implantation']) and row['type d\'implantation'] != ''
-        date_debut = row['Date de début']
-        date_fin = row['Date de fin']
+        date_debut = datetime.strptime(row['Date de début'], '%Y/%m/%d %H:%M:%S')
+        date_fin = datetime.strptime(row['Date de fin'], '%Y/%m/%d %H:%M:%S')
         valeur = row['valeur']
         valeur_brute = row['valeur brute']
         unite_mesure = row['unité de mesure']
