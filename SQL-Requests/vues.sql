@@ -14,30 +14,16 @@ GROUP BY
 CREATE VIEW Depassements_Seuils_Reglementaires AS
 SELECT 
     Stations.Code_Site, 
-    Stations.Nom_Site, 
-    Stations.Type_Implantation, 
     Polluants.Polluant, 
     Mesures.Date_Debut, 
     Mesures.Date_Fin, 
-    Mesures.Valeur, 
-    Mesures.Valeur_Brute, 
-    Unites_Mesure.Unite_Mesure, 
-    Mesures.Taux_Saisie, 
-    Mesures.Couverture_Temporelle, 
-    Mesures.Couverture_Donnees, 
-    Codes_Qualite.Code_Qualite,
-    Mesures.Validite,
-    Mesures.Reglementaire
+    Mesures.Valeur
 FROM
     Mesures
 LEFT JOIN
     Stations ON Mesures.Id_Station = Stations.Id_Station
 LEFT JOIN
     Polluants ON Mesures.Id_Polluant = Polluants.Id_Polluant
-LEFT JOIN
-    Unites_Mesure ON Mesures.Id_Unite_Mesure = Unites_Mesure.Id_Unite_Mesure
-LEFT JOIN
-    Codes_Qualite ON Mesures.Id_Code_Qualite = Codes_Qualite.Id_Code_Qualite
 WHERE
     Mesures.Reglementaire = 'Oui';
 
