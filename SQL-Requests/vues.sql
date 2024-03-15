@@ -1,3 +1,11 @@
+-- supprimer deja existantes
+DROP VIEW IF EXISTS Concentrations_Moyennes_Polluants;
+DROP VIEW IF EXISTS Depassements_Seuils_Reglementaires;
+DROP VIEW IF EXISTS Analyse_Temporelle_Mesures;
+DROP VIEW IF EXISTS Identification_Zones_Risques;
+DROP VIEW IF EXISTS Comparaison_Type_Polluant;
+DROP VIEW IF EXISTS Frequence_Depassements_Polluant;
+
 -- concentrations moyenne polluants 
 CREATE VIEW Concentrations_Moyennes_Polluants AS
 SELECT 

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Concentrations Moyennes des Polluants</title>
+</head>
+<body>
+    <h1>Concentrations Moyennes des Polluants</h1>
+    <form action="/analyse/concentrations-moyennes/resultat" method="post">
+        Polluant : <select name="polluant">
+            <option value="1">PM10</option>
+            <option value="2">NO</option>
+            <option value="3">NO2</option>
+            <option value="4">O3</option>
+            <option value="5">NOX as NO2</option>
+            <option value="6">PM2.5</option>
+            <option value="7">SO2</option>
+            <option value="8">C6H6</option>
+            <option value="9">CO</option>
+        </select>
+        Date de début : <input type="date" name="date_debut">
+        Date de fin : <input type="date" name="date_fin">
+        <input type="submit" value="Analyser">
+    </form>
+</body>
+</html>
