@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Formulaire de Visualisation</title>
+    <meta charset="UTF-8">
+    <title>Sélection d'Analyse</title>
 </head>
 <body>
-    <h2>Entrer les critères de visualisation</h2>
-    <form action="/visualiser" method="post">
-        Station ID: <input type="text" name="station_id"><br>
-        Date début (YYYY-MM-DD): <input type="date" name="date_debut"><br>
-        Date fin (YYYY-MM-DD): <input type="date" name="date_fin"><br>
-        Polluant: <input type="text" name="polluant"><br>
-        <input type="submit" value="Visualiser">
-    </form>
+    <h1>Choisissez une Analyse à Effectuer</h1>
+    <ul>
+        <li><a href="/analyse/concentrations-moyennes">Concentrations Moyennes des Polluants</a></li>
+        <li><a href="/analyse/depassements-seuils">Dépassements des Seuils Réglementaires</a></li>
+        <li><a href="/analyse/analyse-temporelle">Analyse Temporelle des Mesures</a></li>
+        <li><a href="/analyse/zones-risques">Identification des Zones à Risques</a></li>
+        <li><a href="/analyse/comparaison-type-polluant">Comparaison des Types de Polluants</a></li>
+        <li><a href="/analyse/frequence-depassement">Fréquence de Dépassement des Seuils</a></li>
 </body>
 </html>

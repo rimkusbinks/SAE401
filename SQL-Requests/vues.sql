@@ -3,14 +3,15 @@ CREATE VIEW Concentrations_Moyennes_Polluants AS
 SELECT 
     Polluants.Polluant,
     AVG(Mesures.Valeur) AS Concentration_Moyenne,
-    Mesures.Date_Debut AS Date
+    strftime('%Y-%m-%d %H:%M:%S', Mesures.Date_Debut) AS Date
 FROM 
     Mesures
 INNER JOIN 
     Polluants ON Mesures.Id_Polluant = Polluants.Id_Polluant
 GROUP BY 
     Polluants.Polluant, 
-    Mesures.Date_Debut;
+    strftime('%Y-%m-%d %H:%M:%S', Mesures.Date_Debut);
+
 
 -- dépassement des seuils réglementaires
 CREATE VIEW Depassements_Seuils_Reglementaires AS
@@ -41,17 +42,20 @@ LEFT JOIN
 CREATE VIEW Identification_Zones_Risques AS
 SELECT 
     Stations.Id_Station AS Station_Id, 
-    Mesures.Valeur,
+    AVG(Mesures.Valeur) AS Moyenne_Valeur,
     Polluants.Polluant,
-    Mesures.Reglementaire
+    COUNT(Mesures.Id_Mesure) AS Nombre_Depassements
 FROM
     Stations
-LEFT JOIN
+INNER JOIN
     Mesures ON Stations.Id_Station = Mesures.Id_Station
-LEFT JOIN
+INNER JOIN
     Polluants ON Mesures.Id_Polluant = Polluants.Id_Polluant
 WHERE
-    Mesures.Reglementaire = 'Oui';
+    Mesures.Reglementaire = 'Oui'
+GROUP BY
+    Stations.Id_Station, Polluants.Polluant;
+
 
 -- comparaison par type de polluant
 CREATE VIEW Comparaison_Type_Polluant AS
