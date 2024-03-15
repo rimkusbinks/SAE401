@@ -100,7 +100,7 @@
                     <p>procedure_mesure <strong><i>string</i></strong></p>
                     <p>page <strong><i> int</strong></i></p>
                     <p>per_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/procedures_mesure?procedure_mesure=Auto PM_Conf_app MP101M-RST&page=1&per_page=10" target="_blank">http://127.0.0.1:5000/procedures_mesure?procedure_mesure=Auto PM_Conf_app MP101M-RST&page=1&per_page=10</a></p>
+                    <p>Exemple : <a href="http://127.0.0.1:5000/procedures_mesure?procedure_mesure=Auto%20PM_Conf_app%20MP101M-RST&page=1&per_page=10" target="_blank">http://127.0.0.1:5000/procedures_mesure?procedure_mesure=Auto%20PM_Conf_app%20MP101M-RST&page=1&per_page=10</a></p>
                 </details>
                 <details>
                     <summary>Récupération de la liste des Types de valeur</summary>
@@ -108,7 +108,7 @@
                     <p>type_valeur <strong><i>string</i></strong></p>
                     <p>page <strong><i> int</strong></i></p>
                     <p>per_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/types_valeur?type_valeur=Valeur%20limite%20d%27exposition%20moyenne%20(24h)&page=1&per_page=10" target="_blank">http://127.0.0.1:5000/types_valeur?type_valeur=Valeur%20limite%20d%27exposition%20moyenne%20(24h)&page=1&per_page=10</a></p>
+                    <p>Exemple : <a href="http://127.0.0.1:5000/types_valeur?type_valeur=moyenne%20horaire%20validée&page=1&per_page=10" target="_blank">http://127.0.0.1:5000/types_valeur?type_valeur=moyenne%20horaire%20validée&page=1&per_page=10</a></p>
                 </details>
                 <details>
                     <summary>Récupération de la liste des Discriminants</summary>
@@ -116,7 +116,7 @@
                     <p>discriminant <strong><i>string</i></strong></p>
                     <p>page <strong><i> int</strong></i></p>
                     <p>per_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/discriminants?discriminant=A&page=1&per_page=10" target="_blank">1http://127.0.0.1:5000/discriminants?discriminant=A&page=1&per_page=10</a></p>
+                    <p>Exemple : <a href="http://127.0.0.1:5000/discriminants?discriminant=A&page=1&per_page=10" target="_blank">http://127.0.0.1:5000/discriminants?discriminant=A&page=1&per_page=10</a></p>
                 </details>
                 <details>
                     <summary>Récupération de la liste des Unités de mesure</summary>
@@ -124,7 +124,7 @@
                     <p>unite_mesure <strong><i>string</i></strong></p>
                     <p>page <strong><i> int</strong></i></p>
                     <p>per_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/unites_mesure?unite_mesure=µg/m3&page=1&per_page=10" target="_blank">http://127.0.0.1:5000/unites_mesure?unite_mesure=µg/m3&page=1&per_page=10</a></p>
+                    <p>Exemple : <a href="http://127.0.0.1:5000/unites_mesure?unite_mesure=µg-m3&page=1&per_page=10" target="_blank">http://127.0.0.1:5000/unites_mesure?unite_mesure=µg-m3&page=1&per_page=10</a></p>
                 </details>
                 <details>
                     <summary>Récupération de la liste des Codes de qualité</summary>
@@ -132,11 +132,21 @@
                     <p>code_qualite <strong><i>string</i></strong></p>
                     <p>page <strong><i> int</strong></i></p>
                     <p>per_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/codes_qualite?code_qualite=Bon&page=1&per_page=10" target="_blank">http://127.0.0.1:5000/codes_qualite?code_qualite=Bon&page=1&per_page=10</a></p>
+                    <p>Exemple : <a href="http://127.0.0.1:5000/codes_qualite?code_qualite=A&page=1&per_page=10" target="_blank">http://127.0.0.1:5000/codes_qualite?code_qualite=A&page=1&per_page=10</a></p>
                 </details>
                 <details>
-                    <summary>Les arguments de requête pour les mesures</summary>
+                    <summary>Récupération des mesures</summary>
                     <h5>Arguments de requête</h5>
+                    <p>station_id <strong><i>int</i></strong></p>
+                    <p>pollutant_id <strong><i>int</i></strong></p>
+                    <p>start_date <strong><i>datetime</i></strong> (Format ISO 8601: YYYY-MM-DDThh:mm:ss)</p>
+                    <p>end_date <strong><i>datetime</i></strong> (Format ISO 8601: YYYY-MM-DDThh:mm:ss)</p>
+                    <p>unite_mesure <strong><i>string</i></strong></p>
+                    <p>code_qualite <strong><i>string</i></strong></p>
+                    <p>validite <strong><i>int</i></strong> (0 ou 1)</p>
+                    <p>page <strong><i>int</i></strong></p>
+                    <p>per_page <strong><i>int</i></strong></p>
+                    <p>Exemple : <a href="http://127.0.0.1:5000/measurements?station_id=1&pollutant_id=1&start_date=2021-01-01T01:00:00&end_date=2021-01-01T02:00:00&page=1&per_page=10" target="_blank">http://127.0.0.1:5000/measurements?station_id=1&pollutant_id=1&start_date=2021-01-01T00:00:00&end_date=2021-01-01T10:00:00&page=1&per_page=10</a></p>
                 </details>
             </section>
         </div>

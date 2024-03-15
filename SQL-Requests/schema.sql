@@ -144,4 +144,6 @@ LEFT JOIN Codes_Qualite ON Mesures.Id_Code_Qualite = Codes_Qualite.Id_Code_Quali
 LEFT JOIN Stations ON Mesures.Id_Station = Stations.Id_Station
 LEFT JOIN Zas ON Stations.Id_Zas = Zas.Id_Zas
 LEFT JOIN Organismes ON Zas.Id_Organisme = Organismes.Id_Organisme
-LEFT JOIN Unites_Mesure ON Mesures.Id_Unite_Mesure = Unites_Mesure.Id_Unite_Mesure;
+LEFT JOIN Unites_Mesure ON Mesures.Id_Unite_Mesure = Unites_Mesure.Id_Unite_Mesure
+LIMIT 10; -- Ajout de la clause LIMIT
+
