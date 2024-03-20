@@ -4,6 +4,7 @@ import sqlite3
 
 app = Flask(__name__)
 
+# route pour si l'utilisateur accède à une méthode qui n'existe pas
 @app.errorhandler(404)
 def page_not_found(e):
     return jsonify({'error': 'La méthode demandée n\'existe pas, referez-vous à la documentation pour plus d\'informations'}), 404
@@ -18,6 +19,7 @@ def query_db(query, args=(), one=False):
         cur.close()
         return (rv[0] if rv else None) if one else rv
 
+# route pour obtenir les organismes
 @app.route('/organismes')
 def get_organismes():
     organisme = request.args.get('organisme')
@@ -34,7 +36,7 @@ def get_organismes():
     result = query_db(query, params)
     return jsonify(result)
 
-
+# route pour obtenir les zas
 @app.route('/zas')
 def get_zas():
     nom_zas = request.args.get('nom_zas')
@@ -55,7 +57,7 @@ def get_zas():
     result = query_db(query, params)
     return jsonify(result)
 
-
+# route pour obtenir les stations
 @app.route('/stations')
 def get_stations():
     nom_site = request.args.get('nom_site')
@@ -79,7 +81,7 @@ def get_stations():
     result = query_db(query, params)
     return jsonify(result)
 
-
+# route pour obtenir les polluants
 @app.route('/polluants')
 def get_polluants():
     polluant = request.args.get('polluant')
@@ -96,6 +98,7 @@ def get_polluants():
     result = query_db(query, params)
     return jsonify(result)
 
+# route pour obtenir les types d'influence
 @app.route('/types_influence')
 def get_types_influence():
     type_influence = request.args.get('type_influence')
@@ -112,6 +115,7 @@ def get_types_influence():
     result = query_db(query, params)
     return jsonify(result)
 
+# route pour obtenir les types d'évaluation
 @app.route('/types_evaluation')
 def get_types_evaluation():
     type_evaluation = request.args.get('type_evaluation')
@@ -128,6 +132,7 @@ def get_types_evaluation():
     result = query_db(query, params)
     return jsonify(result)
 
+# route pour obtenir les procédures de mesure
 @app.route('/procedures_mesure')
 def get_procedures_mesure():
     procedure_mesure = request.args.get('procedure_mesure')
@@ -144,6 +149,7 @@ def get_procedures_mesure():
     result = query_db(query, params)
     return jsonify(result)
 
+# route pour obtenir les types de valeur
 @app.route('/types_valeur')
 def get_types_valeur():
     type_valeur = request.args.get('type_valeur')
@@ -160,7 +166,7 @@ def get_types_valeur():
     result = query_db(query, params)
     return jsonify(result)
 
-
+# route pour obtenir les discriminants
 @app.route('/discriminants')
 def get_discriminants():
     discriminant = request.args.get('discriminant')
@@ -177,6 +183,7 @@ def get_discriminants():
     result = query_db(query, params)
     return jsonify(result)
 
+# route pour obtenir les unites de mesure
 @app.route('/unites_mesure')
 def get_unites_mesure():
     unite_mesure = request.args.get('unite_mesure')
@@ -193,6 +200,7 @@ def get_unites_mesure():
     result = query_db(query, params)
     return jsonify(result)
 
+# route pour obtenir les codes de qualité
 @app.route('/codes_qualite')
 def get_codes_qualite():
     code_qualite = request.args.get('code_qualite')
@@ -209,7 +217,7 @@ def get_codes_qualite():
     result = query_db(query, params)
     return jsonify(result)
 
-
+# route pour obtenir les mesures 
 @app.route('/measurements')
 def get_measurements():
     print("La méthode get_measurements a été appelée")
