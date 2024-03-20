@@ -11,14 +11,16 @@ CREATE VIEW Concentrations_Moyennes_Polluants AS
 SELECT 
     Polluants.Polluant,
     AVG(Mesures.Valeur) AS Concentration_Moyenne,
-    strftime('%Y-%m-%d %H:%M:%S', Mesures.Date_Debut) AS Date
+    strftime('%Y-%m-%d %H:%M:%S', Mesures.Date_Debut) AS Date_Debut,
+    strftime('%Y-%m-%d %H:%M:%S', Mesures.Date_Fin) AS Date_Fin
 FROM 
     Mesures
 INNER JOIN 
     Polluants ON Mesures.Id_Polluant = Polluants.Id_Polluant
 GROUP BY 
     Polluants.Polluant, 
-    strftime('%Y-%m-%d %H:%M:%S', Mesures.Date_Debut);
+    strftime('%Y-%m-%d %H:%M:%S', Mesures.Date_Debut),
+    strftime('%Y-%m-%d %H:%M:%S', Mesures.Date_Fin);
 
 
 -- dépassement des seuils réglementaires
