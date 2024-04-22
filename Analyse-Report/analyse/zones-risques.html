@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Zones à Risque</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        #risqueChart {
+            box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            background-color: #fff;
+            border-radius: 5px;
+            margin-top: 20px;
+            padding: 15px;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 50vh;
+            width: 90vw;
+        }
+    </style>
+</head>
+<body>
+    <h1>Zones à Risque</h1>
+    
+    <form id="filterForm">
+        Code du Site : <input type="text" name="code_site" placeholder="Code du site"><br>
+        Polluant : <input type="text" name="polluant" placeholder="Polluant"><br>
+        Date de début : <input type="date" name="date_debut"><br>
+        Date de fin : <input type="date" name="date_fin"><br>
+        <button type="button" onclick="applyFilters()">Appliquer les filtres</button>
+    </form>
+    
+    <div class="chart-container">
+        <canvas id="risqueChart"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cette fonction peut être laissée vide si vous ne souhaitez pas charger de données initiales
+        });
+
+        function applyFilters() {
+            const form = document.getElementById('filterForm');
+            const codeSite = form.querySelector('input[name="code_site"]').value;
+            const polluant = form.querySelector('input[name="polluant"]').value;
+            const dateDebut = form.querySelector('input[name="date_debut"]').value;
+            const dateFin = form.querySelector('input[name="date_fin"]').value;
+
+            const queryParams = new URLSearchParams({
+                code_site: codeSite,
+                polluant: polluant,
+                date_debut: dateDebut,
+                date_fin: dateFin
+            }).toString();
+
+            fetch(`http://localhost:5000/api/zones-risques?${queryParams}`)
+                .then(response => response.json())
+                .then(data => {
+                    const labels = data.map(item => `${item.Code_Site} - ${item.Date_Debut}`);
+                    const valeurs = data.map(item => item.Valeur);
+                    const ctx = document.getElementById('risqueChart').getContext('2d');
+                    updateChart(ctx, labels, valeurs);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des données:', error);
+                });
+        }
+
+        function updateChart(ctx, labels, valeurs) {
+            const backgroundColors = valeurs.map(valeur => valeur > 100 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
+            const borderColors = valeurs.map(valeur => valeur > 100 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
+
+            if (window.risqueChart instanceof Chart) {
+                window.risqueChart.destroy();
+            }
+
+            window.risqueChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Valeur de concentration',
+                        data: valeurs,
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Valeur'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Zones à Risque',
+                            font: {
+                                size: 20
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    var label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + ' μg/m³';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutBounce'
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
