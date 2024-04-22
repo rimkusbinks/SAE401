@@ -1,9 +1,10 @@
 from flask import Flask, request, jsonify
 from datetime import datetime
+from flask_cors import CORS
 import sqlite3
 
 app = Flask(__name__)
-
+CORS(app)
 # route pour si l'utilisateur accède à une méthode qui n'existe pas
 @app.errorhandler(404)
 def page_not_found(e):
@@ -385,6 +386,69 @@ def get_measurements():
 
     result = query_db(query, params)
     return jsonify(result)
+
+def query_db(query, args=(), one=False):
+    with sqlite3.connect("database/SAE401.db") as conn:  # Assurez-vous du chemin
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+        cur.execute(query, args)
+        rv = [dict(row) for row in cur.fetchall()]
+        cur.close()
+        return (rv[0] if rv else None) if one else rv
+
+@app.route('/api/concentrations-moyennes')
+def get_concentration_moyennes():
+    query = "SELECT Polluant, AVG(Concentration_Moyenne) as Concentration_Moyenne FROM Concentrations_Moyennes_Polluants GROUP BY Polluant"
+    data = query_db(query)
+    return jsonify(data)
+
+def get_db_connection():
+    conn = sqlite3.connect("database/SAE401.db")
+    conn.row_factory = sqlite3.Row
+    return conn
+
+@app.route('/api/depassements-seuils')
+def depassements_seuils():
+    # Récupérer les paramètres de la requête
+    code_site = request.args.get('code_site')
+    polluant = request.args.get('polluant')
+    date_debut = request.args.get('date_debut')
+
+    # Construction de la requête SQL de base
+    query = '''
+    SELECT Code_Site, Polluant, Date_Debut, Date_Fin, Valeur
+    FROM Depassements_Seuils_Reglementaires
+    WHERE 1=1
+    '''
+
+    # Préparation des paramètres pour sécuriser la requête
+    params = []
+    if code_site:
+        query += ' AND Code_Site = ?'
+        params.append(code_site)
+    if polluant:
+        query += ' AND Polluant = ?'
+        params.append(polluant)
+    if date_debut:
+        # Utiliser la fonction strftime pour convertir le format de date si nécessaire
+        query += ' AND Date_Debut >= datetime(?, "start of day")'
+        params.append(date_debut)
+
+    # Connexion à la base de données et exécution de la requête
+    conn = sqlite3.connect("database/SAE401.db")  # Assurez-vous que le chemin de la base de données est correct
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    cur.execute(query, params)
+    result = cur.fetchall()
+    cur.close()
+    conn.close()
+
+    # Convertir les rangées de la base de données en dictionnaires
+    depassements = [dict(row) for row in result]
+
+    # Renvoyer les données au format JSON
+    return jsonify(depassements)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

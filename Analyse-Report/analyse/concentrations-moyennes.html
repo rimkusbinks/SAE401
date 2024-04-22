@@ -1,26 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Concentrations Moyennes des Polluants</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        #pollutantChart {
+            box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            background-color: #fff;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh;
+            width: 80vw;
+        }
+    </style>
 </head>
 <body>
-    <h1>Concentrations Moyennes des Polluants</h1>
-    <form action="/analyse/concentrations-moyennes/resultat" method="post">
-        Polluant : <select name="polluant">
-            <option value="1">PM10</option>
-            <option value="2">NO</option>
-            <option value="3">NO2</option>
-            <option value="4">O3</option>
-            <option value="5">NOX as NO2</option>
-            <option value="6">PM2.5</option>
-            <option value="7">SO2</option>
-            <option value="8">C6H6</option>
-            <option value="9">CO</option>
-        </select>
-        Date de début : <input type="date" name="date_debut">
-        Date de fin : <input type="date" name="date_fin">
-        <input type="submit" value="Analyser">
-    </form>
+    <h1>Comparaison des Concentrations Moyennes des Polluants</h1>
+    <div>
+        Sélectionnez les polluants à comparer:<br>
+        <input type="checkbox" name="polluant" value="C6H6"> C6H6<br>
+        <input type="checkbox" name="polluant" value="CO"> CO<br>
+        <input type="checkbox" name="polluant" value="NO"> NO<br>
+        <input type="checkbox" name="polluant" value="NO2"> NO2<br>
+        <input type="checkbox" name="polluant" value="NOX as NO2"> NOX as NO2<br>
+        <input type="checkbox" name="polluant" value="O3"> O3<br>
+        <input type="checkbox" name="polluant" value="PM10"> PM10<br>
+        <input type="checkbox" name="polluant" value="PM2.5"> PM2.5<br>
+        <input type="checkbox" name="polluant" value="SO2"> SO2<br>
+        <button type="button" id="compareButton">Comparer</button>
+    </div>
+    
+    <div class="chart-container">
+        <canvas id="pollutantChart"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const compareButton = document.getElementById('compareButton');
+            compareButton.addEventListener('click', loadAndDisplayChart);
+        });
+
+        function loadAndDisplayChart() {
+            const selectedPollutants = Array.from(document.querySelectorAll('input[name="polluant"]:checked')).map(el => el.value);
+            fetch('http://localhost:5000/api/concentrations-moyennes')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Réponse réseau non OK');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const filteredData = data.filter(item => selectedPollutants.includes(item.Polluant));
+                    const labels = filteredData.map(item => item.Polluant);
+                    const concentrations = filteredData.map(item => item.Concentration_Moyenne);
+                    const ctx = document.getElementById('pollutantChart').getContext('2d');
+                    updateChart(ctx, labels, concentrations);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des données:', error);
+                });
+        }
+
+        function updateChart(ctx, labels, concentrations) {
+            if(window.myChart) {
+                window.myChart.destroy();
+            }
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Concentration Moyenne',
+                        data: concentrations,
+                        backgroundColor: labels.map(label => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.5)`),
+                        borderColor: labels.map(label => 'rgba(0,0,0,0.1)'),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Concentration'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Polluant'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Comparaison des Concentrations Moyennes des Polluants',
+                            padding: {
+                                top: 10,
+                                bottom: 30
+                            },
+                            font: {
+                                size: 20,
+                                weight: 'bold'
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            mode: 'index',
+                            intersect: false,
+                            bodySpacing: 8,
+                            titleSpacing: 6,
+                            cornerRadius: 8,
+                            caretPadding: 10,
+                            displayColors: false,
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 12 },
+                            footerFont: { size: 12 }
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>

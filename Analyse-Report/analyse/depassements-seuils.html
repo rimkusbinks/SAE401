@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dépassements des Seuils Réglementaires</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        #depassementChart {
+            box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            background-color: #fff;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 40vh;
+            width: 80vw;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dépassements des Seuils Réglementaires</h1>
+    
+    <form id="filterForm">
+        Code du Site : <input type="text" name="code_site" placeholder="Code du site"><br>
+        Polluant : <input type="text" name="polluant" placeholder="Polluant"><br>
+        Date de début : <input type="date" name="date_debut"><br>
+        Date de fin : <input type="date" name="date_fin"><br>
+        <button type="button" onclick="applyFilters()">Appliquer les filtres</button>
+    </form>
+    
+    <div class="chart-container">
+        <canvas id="depassementChart"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAndDisplayDepassements(); // Chargez initialement tous les dépassements
+        });
+
+        function applyFilters() {
+            const form = document.getElementById('filterForm');
+            const codeSite = form.querySelector('input[name="code_site"]').value;
+            const polluant = form.querySelector('input[name="polluant"]').value;
+            const dateDebut = form.querySelector('input[name="date_debut"]').value;
+            const dateFin = form.querySelector('input[name="date_fin"]').value;
+
+            const queryParams = new URLSearchParams({
+                code_site: codeSite,
+                polluant: polluant,
+                date_debut: dateDebut,
+                date_fin: dateFin // Ajouté le paramètre date_fin
+            }).toString();
+
+            fetch(`http://localhost:5000/api/depassements-seuils?${queryParams}`)
+                .then(response => response.json())
+                .then(data => {
+                    const labels = data.map(item => `${item.Polluant} (${item.Code_Site}) - ${item.Date_Debut}`);
+                    const valeurs = data.map(item => item.Valeur);
+                    const ctx = document.getElementById('depassementChart').getContext('2d');
+                    updateChart(ctx, labels, valeurs);
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des données:', error);
+                });
+        }
+
+        function loadAndDisplayDepassements() {
+            // La fonction initiale est supprimée car elle n'est plus nécessaire avec le nouveau bouton de filtre
+        }
+
+        function updateChart(ctx, labels, valeurs) {
+            const backgroundColors = labels.map(() => `hsla(${Math.random() * 360}, 100%, 50%, 0.5)`);
+            if(window.depassementChart) {
+                window.depassementChart.destroy();
+            }
+            window.depassementChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Valeur des dépassements',
+                        data: valeurs,
+                        backgroundColor: backgroundColors,
+                        borderColor: 'rgba(0,0,0,0.1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Valeur'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Valeurs des dépassements par site et polluant',
+                            font: {
+                                size: 18
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
