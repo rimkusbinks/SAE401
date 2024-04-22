@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -29,7 +30,17 @@
 <body>
     <h1>Comparaison des Concentrations Moyennes des Polluants</h1>
     <div>
+        Sélectionnez le type de graphique:
+        <select id="chartType">
+            <option value="bar">Barre</option>
+            <option value="line">Ligne</option>
+            <option value="radar">Radar</option>
+            <option value="pie">Camembert (Pie)</option>
+        </select>
+    </div>
+    <div>
         Sélectionnez les polluants à comparer:<br>
+        <!-- Insérez ici vos inputs pour les polluants -->
         <input type="checkbox" name="polluant" value="C6H6"> C6H6<br>
         <input type="checkbox" name="polluant" value="CO"> CO<br>
         <input type="checkbox" name="polluant" value="NO"> NO<br>
@@ -40,6 +51,7 @@
         <input type="checkbox" name="polluant" value="PM2.5"> PM2.5<br>
         <input type="checkbox" name="polluant" value="SO2"> SO2<br>
         <button type="button" id="compareButton">Comparer</button>
+        <!-- ... -->
     </div>
     
     <div class="chart-container">
@@ -54,6 +66,8 @@
 
         function loadAndDisplayChart() {
             const selectedPollutants = Array.from(document.querySelectorAll('input[name="polluant"]:checked')).map(el => el.value);
+            const chartType = document.getElementById('chartType').value;
+
             fetch('http://localhost:5000/api/concentrations-moyennes')
                 .then(response => {
                     if (!response.ok) {
@@ -66,26 +80,34 @@
                     const labels = filteredData.map(item => item.Polluant);
                     const concentrations = filteredData.map(item => item.Concentration_Moyenne);
                     const ctx = document.getElementById('pollutantChart').getContext('2d');
-                    updateChart(ctx, labels, concentrations);
+                    updateChart(ctx, chartType, labels, concentrations);
                 })
                 .catch(error => {
                     console.error('Erreur lors de la récupération des données:', error);
                 });
         }
 
-        function updateChart(ctx, labels, concentrations) {
+        function updateChart(ctx, chartType, labels, concentrations) {
+            const backgroundColors = chartType === 'pie' || chartType === 'radar'
+                ? labels.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.5)`)
+                : 'rgba(0, 123, 255, 0.5)';
+
+            const borderColors = chartType === 'pie' || chartType === 'radar'
+                ? labels.map(() => 'rgba(0,0,0,0.1)')
+                : 'rgba(0, 123, 255, 1)';
+
             if(window.myChart) {
                 window.myChart.destroy();
             }
             window.myChart = new Chart(ctx, {
-                type: 'bar',
+                type: chartType,
                 data: {
                     labels: labels,
                     datasets: [{
                         label: 'Concentration Moyenne',
                         data: concentrations,
-                        backgroundColor: labels.map(label => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.5)`),
-                        borderColor: labels.map(label => 'rgba(0,0,0,0.1)'),
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColors,
                         borderWidth: 1
                     }]
                 },
@@ -93,23 +115,23 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: {
+                        y: chartType !== 'pie' ? {
                             beginAtZero: true,
                             title: {
                                 display: true,
                                 text: 'Concentration'
                             }
-                        },
-                        x: {
+                        } : undefined,
+                        x: chartType !== 'pie' ? {
                             title: {
                                 display: true,
                                 text: 'Polluant'
                             }
-                        }
+                        } : undefined
                     },
                     plugins: {
                         legend: {
-                            display: false
+                            display: chartType !== 'pie'
                         },
                         title: {
                             display: true,
@@ -122,25 +144,7 @@
                                 size: 20,
                                 weight: 'bold'
                             }
-                        },
-                        tooltip: {
-                            enabled: true,
-                            mode: 'index',
-                            intersect: false,
-                            bodySpacing: 8,
-                            titleSpacing: 6,
-                            cornerRadius: 8,
-                            caretPadding: 10,
-                            displayColors: false,
-                            backgroundColor: 'rgba(0,0,0,0.8)',
-                            titleFont: { size: 14, weight: 'bold' },
-                            bodyFont: { size: 12 },
-                            footerFont: { size: 12 }
                         }
-                    },
-                    animation: {
-                        animateScale: true,
-                        animateRotate: true
                     }
                 }
             });

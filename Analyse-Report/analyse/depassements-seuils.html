@@ -35,6 +35,13 @@
         Polluant : <input type="text" name="polluant" placeholder="Polluant"><br>
         Date de début : <input type="date" name="date_debut"><br>
         Date de fin : <input type="date" name="date_fin"><br>
+        Type de Graphique :
+        <select name="chart_type">
+            <option value="bar">Barre</option>
+            <option value="line">Ligne</option>
+            <option value="radar">Radar</option>
+            <option value="pie">Secteur</option>
+        </select><br>
         <button type="button" onclick="applyFilters()">Appliquer les filtres</button>
     </form>
     
@@ -44,7 +51,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Cette fonction peut être laissée vide si vous ne souhaitez pas charger de données initiales
+            // Initialement, charger un type de graphique par défaut
+            applyFilters();
         });
 
         function applyFilters() {
@@ -53,6 +61,7 @@
             const polluant = form.querySelector('input[name="polluant"]').value;
             const dateDebut = form.querySelector('input[name="date_debut"]').value;
             const dateFin = form.querySelector('input[name="date_fin"]').value;
+            const chartType = form.querySelector('select[name="chart_type"]').value;
 
             const queryParams = new URLSearchParams({
                 code_site: codeSite,
@@ -67,24 +76,23 @@
                     const labels = data.map(item => `${item.Polluant} (${item.Code_Site}) - ${item.Date_Debut}`);
                     const valeurs = data.map(item => item.Valeur);
                     const ctx = document.getElementById('depassementChart').getContext('2d');
-                    updateChart(ctx, labels, valeurs);
+                    updateChart(ctx, labels, valeurs, chartType);
                 })
                 .catch(error => {
                     console.error('Erreur lors de la récupération des données:', error);
                 });
         }
 
-        function updateChart(ctx, labels, valeurs) {
+        function updateChart(ctx, labels, valeurs, chartType) {
             const backgroundColors = valeurs.map(valeur => valeur > 50 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
             const borderColors = valeurs.map(valeur => valeur > 50 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
 
-            // Vérifiez si window.depassementChart est une instance de Chart avant d'appeler destroy
             if (window.depassementChart instanceof Chart) {
                 window.depassementChart.destroy();
             }
 
             window.depassementChart = new Chart(ctx, {
-                type: 'bar',
+                type: chartType,
                 data: {
                     labels: labels,
                     datasets: [{
@@ -92,7 +100,8 @@
                         data: valeurs,
                         backgroundColor: backgroundColors,
                         borderColor: borderColors,
-                        borderWidth: 1
+                        borderWidth: 1,
+                        fill: chartType !== 'line' // Ajuste le remplissage en fonction du type
                     }]
                 },
                 options: {
@@ -109,8 +118,8 @@
                     },
                     plugins: {
                         legend: {
-                            display: true, // Activez la légende si vous le souhaitez
-                            position: 'top' // Vous pouvez choisir 'top', 'bottom', 'left', 'right'
+                            display: true,
+                            position: 'top'
                         },
                         title: {
                             display: true,
@@ -121,19 +130,7 @@
                         },
                         tooltip: {
                             mode: 'index',
-                            intersect: false,
-                            callbacks: {
-                                label: function(context) {
-                                    var label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.y !== null) {
-                                        label += context.parsed.y + ' μg/m³';
-                                    }
-                                    return label;
-                                }
-                            }
+                            intersect: false
                         }
                     },
                     animation: {
