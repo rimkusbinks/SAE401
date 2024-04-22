@@ -17,12 +17,13 @@
             background-color: #fff;
             border-radius: 5px;
             margin-top: 20px;
+            padding: 15px;
         }
         .chart-container {
             position: relative;
             margin: auto;
-            height: 40vh;
-            width: 80vw;
+            height: 50vh; /* Ajusté pour utiliser plus d'espace vertical */
+            width: 90vw; /* Ajusté pour utiliser plus d'espace horizontal */
         }
     </style>
 </head>
@@ -43,7 +44,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            loadAndDisplayDepassements(); // Chargez initialement tous les dépassements
+            // Cette fonction peut être laissée vide si vous ne souhaitez pas charger de données initiales
         });
 
         function applyFilters() {
@@ -57,7 +58,7 @@
                 code_site: codeSite,
                 polluant: polluant,
                 date_debut: dateDebut,
-                date_fin: dateFin // Ajouté le paramètre date_fin
+                date_fin: dateFin
             }).toString();
 
             fetch(`http://localhost:5000/api/depassements-seuils?${queryParams}`)
@@ -73,15 +74,15 @@
                 });
         }
 
-        function loadAndDisplayDepassements() {
-            // La fonction initiale est supprimée car elle n'est plus nécessaire avec le nouveau bouton de filtre
-        }
-
         function updateChart(ctx, labels, valeurs) {
-            const backgroundColors = labels.map(() => `hsla(${Math.random() * 360}, 100%, 50%, 0.5)`);
-            if(window.depassementChart) {
+            const backgroundColors = valeurs.map(valeur => valeur > 50 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)');
+            const borderColors = valeurs.map(valeur => valeur > 50 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)');
+
+            // Vérifiez si window.depassementChart est une instance de Chart avant d'appeler destroy
+            if (window.depassementChart instanceof Chart) {
                 window.depassementChart.destroy();
             }
+
             window.depassementChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -90,7 +91,7 @@
                         label: 'Valeur des dépassements',
                         data: valeurs,
                         backgroundColor: backgroundColors,
-                        borderColor: 'rgba(0,0,0,0.1)',
+                        borderColor: borderColors,
                         borderWidth: 1
                     }]
                 },
@@ -108,15 +109,36 @@
                     },
                     plugins: {
                         legend: {
-                            display: false
+                            display: true, // Activez la légende si vous le souhaitez
+                            position: 'top' // Vous pouvez choisir 'top', 'bottom', 'left', 'right'
                         },
                         title: {
                             display: true,
                             text: 'Valeurs des dépassements par site et polluant',
                             font: {
-                                size: 18
+                                size: 20
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    var label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + ' μg/m³';
+                                    }
+                                    return label;
+                                }
                             }
                         }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutBounce'
                     }
                 }
             });

@@ -449,6 +449,36 @@ def depassements_seuils():
     # Renvoyer les données au format JSON
     return jsonify(depassements)
 
+@app.route('/api/analyse-temporelle')
+def analyse_temporelle():
+    # Récupération des paramètres de la requête
+    code_site = request.args.get('code_site')
+    polluant = request.args.get('polluant')
+    date_debut = request.args.get('date_debut')
+    date_fin = request.args.get('date_fin')
+
+    # Vérifiez que tous les paramètres nécessaires sont fournis
+    if not (code_site and polluant and date_debut and date_fin):
+        return jsonify({"error": "Tous les paramètres (code_site, polluant, date_debut, date_fin) sont nécessaires."}), 400
+
+    # Connexion à la base de données et requête
+    try:
+        conn = sqlite3.connect("database/SAE401.db")  # Remplacer par le chemin réel vers votre base de données
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+        cur.execute('''
+            SELECT Code_Site, Polluant, Date_Debut, Date_Fin, Valeur
+            FROM Analyse_Temporelle_Mesures 
+            WHERE Code_Site = ? AND Polluant = ? AND (Date_Debut BETWEEN ? AND ?)
+            ORDER BY Date_Debut ASC
+        ''', (code_site, polluant, date_debut, date_fin))
+        data = cur.fetchall()
+        cur.close()
+        return jsonify([dict(row) for row in data])
+    except sqlite3.Error as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        conn.close()
 
 if __name__ == '__main__':
     app.run(debug=True)
