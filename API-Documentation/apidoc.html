@@ -45,113 +45,132 @@
                 <details>
                     <summary>Récupération de la liste des organismes</summary>
                     <h5>Arguments de requête</h5>
-                    <p>organisme <strong><i>string</i></strong></p>
-                    <p>page <strong><i> int</strong></i></p>
-                    <p>par_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/organismes?organisme=AIRPARIF&page=1&par_page=10" target="_blank">127.0.0.1:5000/organismes?organisme=AIRPARIF&page=1&par_page=10</a></p>
+                    <form action="http://127.0.0.1:5000/organismes" method="GET">
+                        <input type="text" name="organisme" placeholder="Nom de l'organisme (int)">
+                        <input type="number" name="page" placeholder="Nombre de page (int)" min="1">
+                        <input type="number" name="par_page" placeholder="Résultat par page (int)" min="1">
+                        <input type="submit" value="Rechercher Organismes">
+                    </form>
                 </details>
                 <details>
                     <summary>Récupération de la liste des zones de surveillance</summary>
                     <h5>Arguments de requête</h5>
-                    <p>nom_zas <strong><i>string</i></strong></p>
-                    <p>code_zas <strong><i>string</i></strong></p>
-                    <p>page <strong><i> int</strong></i></p>
-                    <p>par_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/zas?nom_zas=ZAG PARIS&code_zas=FR11ZAG01&page=1&par_page=10" target="_blank">127.0.0.1:5000/zas?nom_zas=ZAG PARIS&code_zas=FR11ZAG01&page=1&par_page=10</a></p>
+                    <form action="http://127.0.0.1:5000/zas" method="GET">
+                        <input type="text" name="nom_zas" placeholder="Nom ZAS (string)">
+                        <input type="text" name="code_zas" placeholder="Code ZAS (string)">
+                        <input type="number" name="page" placeholder="Nombre de page (int)" min="1">
+                        <input type="number" name="par_page" placeholder="Résultat par page (int)" min="1">
+                        <input type="submit" value="Rechercher ZAS">
+                    </form>
                 </details>
                 <details>
                     <summary>Récupération de la liste des Stations</summary>
                     <h5>Arguments de requête</h5>
-                    <p>nom_site <strong><i>string</i></strong></p>
-                    <p>code_site <strong><i>string</i></strong></p>
-                    <p>page <strong><i> int</strong></i></p>
-                    <p>par_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/stations?nom_site=Hayange&code_site=FR01005&page=1&par_page=10" target="_blank">http://127.0.0.1:5000/stations?nom_site=Hayange&code_site=FR01005&page=1&par_page=10</a></p>
+                    <form action="http://127.0.0.1:5000/stations" method="GET">
+                        <input type="text" name="nom_site" placeholder="Nom du site (string)">
+                        <input type="text" name="code_site" placeholder="Code du site (string)">
+                        <input type="number" name="page" placeholder="Nombre de page (int)" min="1">
+                        <input type="number" name="par_page" placeholder="Résultat par page" min="1">
+                        <input type="submit" value="Rechercher Stations">
+                    </form>
                 </details>
                 <details>
                     <summary>Récupération de la liste des Polluants</summary>
                     <h5>Arguments de requête</h5>
-                    <p>polluant <strong><i>string</i></strong></p>
-                    <p>page <strong><i> int</strong></i></p>
-                    <p>par_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/polluants?polluant=PM10&page=1&par_page=10" target="_blank">127.0.0.1:5000/polluants?polluant=PM10&page=1&par_page=10</a></p>
+                    <form action="http://127.0.0.1:5000/polluants" method="GET">
+                        <input type="text" name="polluant" placeholder="Nom du polluant (string)">
+                        <input type="number" name="page" placeholder="Nombre de page (int)" min="1">
+                        <input type="number" name="par_page" placeholder="Résultat par page (int)" min="1">
+                        <input type="submit" value="Rechercher Polluants">
+                    </form>
                 </details>
                 <details>
                     <summary>Récupération de la liste des Types d'influence</summary>
                     <h5>Arguments de requête</h5>
-                    <p>type_influence <strong><i>string</i></strong></p>
-                    <p>page <strong><i> int</strong></i></p>
-                    <p>par_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/types_influence?type_influence=Industrielle&page=1&par_page=10" target="_blank">http://127.0.0.1:5000/types_influence?type_influence=Industrielle&page=1&par_page=10</a></p>
+                    <form action="http://127.0.0.1:5000/types_influence" method="GET">
+                        <input type="text" name="type_influence" placeholder="Nom du type d'influence (string)">
+                        <input type="number" name="page" placeholder="Nombre de page (int)" min="1">
+                        <input type="number" name="par_page" placeholder="Résultat par page (int)" min="1">
+                        <input type="submit" value="Rechercher Types d'Influence">
+                    </form>
                 </details>
                 <details>
                     <summary>Récupération de la liste des Types d'évaluation</summary>
                     <h5>Arguments de requête</h5>
-                    <p>type_evaluation <strong><i>string</i></strong></p>
-                    <p>page <strong><i> int</strong></i></p>
-                    <p>par_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/types_evaluation?type_evaluation=mesures indicatives&page=1&par_page=10" target="_blank">http://127.0.0.1:5000/types_evaluation?type_evaluation=mesures indicatives&page=1&par_page=10</a></p>
+                    <form action="http://127.0.0.1:5000/types_evaluation" method="GET">
+                        <input type="text" name="type_evaluation" placeholder="Nom du type d'évaluation (string)">
+                        <input type="number" name="page" placeholder="Nombre de page (int)" min="1">
+                        <input type="number" name="par_page" placeholder="Résultat par page (int)" min="1">
+                        <input type="submit" value="Rechercher Types d'Évaluation">
+                    </form>
                 </details>
                 <details>
                     <summary>Récupération de la liste des Procédures de mesure</summary>
                     <h5>Arguments de requête</h5>
-                    <p>procedure_mesure <strong><i>string</i></strong></p>
-                    <p>page <strong><i> int</strong></i></p>
-                    <p>par_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/procedures_mesure?procedure_mesure=Auto%20PM_Conf_app%20MP101M-RST&page=1&par_page=10" target="_blank">http://127.0.0.1:5000/procedures_mesure?procedure_mesure=Auto%20PM_Conf_app%20MP101M-RST&page=1&par_page=10</a></p>
+                    <form action="http://127.0.0.1:5000/procedures_mesure" method="GET">
+                        <input type="text" name="procedure_mesure" placeholder="Nom de la procédure de mesure (string)">
+                        <input type="number" name="page" placeholder="Nombre de page (int)" min="1">
+                        <input type="number" name="par_page" placeholder="Résultat par page (int)" min="1">
+                        <input type="submit" value="Rechercher Procédures de Mesure">
+                    </form>
                 </details>
                 <details>
                     <summary>Récupération de la liste des Types de valeur</summary>
                     <h5>Arguments de requête</h5>
-                    <p>type_valeur <strong><i>string</i></strong></p>
-                    <p>page <strong><i> int</strong></i></p>
-                    <p>par_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/types_valeur?type_valeur=moyenne%20horaire%20validée&page=1&par_page=10" target="_blank">http://127.0.0.1:5000/types_valeur?type_valeur=moyenne%20horaire%20validée&page=1&par_page=10</a></p>
+                    <form action="http://127.0.0.1:5000/types_valeur" method="GET">
+                        <input type="text" name="type_valeur" placeholder="Nom du type de valeur (string)">
+                        <input type="number" name="page" placeholder="Nombre de page (int)" min="1">
+                        <input type="number" name="par_page" placeholder="Résultat par page (int)" min="1">
+                        <input type="submit" value="Rechercher Types de Valeur">
+                    </form>
                 </details>
                 <details>
                     <summary>Récupération de la liste des Discriminants</summary>
                     <h5>Arguments de requête</h5>
-                    <p>discriminant <strong><i>string</i></strong></p>
-                    <p>page <strong><i> int</strong></i></p>
-                    <p>par_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/discriminants?discriminant=A&page=1&par_page=10" target="_blank">http://127.0.0.1:5000/discriminants?discriminant=A&page=1&par_page=10</a></p>
+                    <form action="http://127.0.0.1:5000/discriminants" method="GET">
+                        <input type="text" name="discriminant" placeholder="Nom du discriminant (string)">
+                        <input type="number" name="page" placeholder="Nombre de page (int)" min="1">
+                        <input type="number" name="par_page" placeholder="Résultat par page (int)" min="1">
+                        <input type="submit" value="Rechercher Discriminants">
+                    </form>
                 </details>
                 <details>
                     <summary>Récupération de la liste des Unités de mesure</summary>
                     <h5>Arguments de requête</h5>
-                    <p>unite_mesure <strong><i>string</i></strong></p>
-                    <p>page <strong><i> int</strong></i></p>
-                    <p>par_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/unites_mesure?unite_mesure=µg-m3&page=1&par_page=10" target="_blank">http://127.0.0.1:5000/unites_mesure?unite_mesure=µg-m3&page=1&par_page=10</a></p>
+                    <form action="http://127.0.0.1:5000/unites_mesure" method="GET">
+                        <input type="text" name="unite_mesure" placeholder="Nom de l'unité de mesure (string)">
+                        <input type="number" name="page" placeholder="Nombre de page (int)" min="1">
+                        <input type="number" name="par_page" placeholder="Résultat par page (int)" min="1">
+                        <input type="submit" value="Rechercher Unités de Mesure">
+                    </form>
                 </details>
                 <details>
                     <summary>Récupération de la liste des Codes de qualité</summary>
                     <h5>Arguments de requête</h5>
-                    <p>code_qualite <strong><i>string</i></strong></p>
-                    <p>page <strong><i> int</strong></i></p>
-                    <p>par_page <strong><i> int</strong></i></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/codes_qualite?code_qualite=A&page=1&par_page=10" target="_blank">http://127.0.0.1:5000/codes_qualite?code_qualite=A&page=1&par_page=10</a></p>
+                    <form action="http://127.0.0.1:5000/codes_qualite" method="GET">
+                        <input type="text" name="code_qualite" placeholder="Nom du code de qualité (string)">
+                        <input type="number" name="page" placeholder="Nombre de page (int)" min="1">
+                        <input type="number" name="par_page" placeholder="Résultat par page (int)" min="1">
+                        <input type="submit" value="Rechercher Codes de Qualité">
+                    </form>
                 </details>
                 <details>
                     <summary>Récupération des mesures</summary>
                     <h5>Arguments de requête</h5>
-                    <p>station_id <strong><i>int</i></strong></p>
-                    <p>pollutant_id <strong><i>int</i></strong></p>
-                    <p>start_date <strong><i>datetime</i></strong> (Format ISO 8601: YYYY-MM-DDThh:mm:ss)</p>
-                    <p>end_date <strong><i>datetime</i></strong> (Format ISO 8601: YYYY-MM-DDThh:mm:ss)</p>
-                    <p>unite_mesure <strong><i>string</i></strong></p>
-                    <p>code_qualite <strong><i>string</i></strong></p>
-                    <p>validite <strong><i>int</i></strong> (0 ou 1)</p>
-                    <p>page <strong><i>int</i></strong></p>
-                    <p>par_page <strong><i>int</i></strong></p>
-                    <p>Exemple : <a href="http://127.0.0.1:5000/measurements?station_id=1&pollutant_id=1&start_date=2021-01-01T01:00:00&end_date=2021-01-01T02:00:00&page=1&par_page=10" target="_blank">http://127.0.0.1:5000/measurements?station_id=1&pollutant_id=1&start_date=2021-01-01T00:00:00&end_date=2021-01-01T10:00:00&page=1&par_page=10</a></p>
-                </details>
+                    <form action="http://127.0.0.1:5000/measurements" method="GET">
+                        <input type="text" name="start_date" placeholder="Date de début (YYYY-MM-DDThh:mm:ss)">
+                        <input type="text" name="end_date" placeholder="Date de fin (YYYY-MM-DDThh:mm:ss)">
+                        <input type="text" name="code_site" placeholder="Code du site (string)">
+                        <input type="text" name="polluant" placeholder="Nom du polluant (string)">
+                        <input type="text" name="type_valeur" placeholder="Type de valeur (string)">
+                        <input type="text" name="code_qualite" placeholder="Code de qualité (string)">
+                        <input type="number" name="page" placeholder="Nombre de page (int)" min="1">
+                        <input type="number" name="par_page" placeholder="Résultat par page (int)" min="1">
+                        <input type="submit" value="Rechercher Mesures">
+                    </form>
+                </details>                
             </section>
         </div>
     </main>
-    <footer class="container">
-        <small><a href="#">Tarpez</a></small>
-    </footer>
 </body>
-
 </html>
