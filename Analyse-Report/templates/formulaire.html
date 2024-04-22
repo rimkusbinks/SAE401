@@ -2,16 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
     <title>Sélection d'Analyse</title>
+    <style>
+        .api-method {
+            padding: 0.5em;
+            margin: 0.5em 0;
+            border-left: 5px solid #49cc90;
+        }
+
+        details > summary {
+            cursor: pointer;
+            padding: 0.5em;
+            margin: 0.5em 0;
+            border-left: 5px solid #49cc90;
+        }
+
+        details > p {
+            padding-left: 1em;
+        }
+        main {
+            padding-left: 1em;
+        }
+    </style>
 </head>
 <body>
-    <h1>Choisissez une Analyse à Effectuer</h1>
-    <ul>
-        <li><a href="../analyse/concentrations-moyennes.html">Concentrations Moyennes des Polluants</a></li>
-        <li><a href="/analyse/depassements-seuils.html">Dépassements des Seuils Réglementaires</a></li>
-        <li><a href="/analyse/analyse-temporelle.html">Analyse Temporelle des Mesures</a></li>
-        <li><a href="/analyse/zones-risques.html">Identification des Zones à Risques</a></li>
-        <li><a href="/analyse/comparaison-type-polluant.html">Comparaison des Types de Polluants</a></li>
-        <li><a href="/analyse/frequence-depassement.html">Fréquence de Dépassement des Seuils</a></li>
-</body>
+    <nav class="container-fluid">
+        <ul>
+            <li><strong>Analyse</strong></li>
+        </ul>
+        <ul>
+            <li><a href="../../API-Documentation/apidoc.html" target="_blank" role="button">API Documentation</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+        <div class="grid">
+            <section>
+                <h1>Sélection d'Analyse</h1>
+                    <a href="../analyse/concentrations-moyennes.html" target="_blank" role="button">Concentrations Moyennes des Polluants</a>
+                    <br>
+                    <a href="../analyse/analyse-temporelle.html" target="_blank" role="button">Analyse Temporelle</a>
+                    <br>
+                    <a href="../analyse/comparaison-type-polluant.html" target="_blank" role="button">Comparaison par Type de Polluant</a>
+                    <br>
+                    <a href="../analyse/depassement-seuils.html" target="_blank" role="button">Dépassement de Seuil</a>
+                    <br>
+                    <a href="../analyse/frequence-depassement.html" target="_blank" role="button">Fréquence de Dépassement</a>
+                    <br>
+                    <a href="../analyse/zones-risques.html" target="_blank" role="button">Zones à Risques</a>
+            </section>
+        </div>
+    </main>
 </html>
