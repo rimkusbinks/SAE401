@@ -4,128 +4,68 @@
     <meta charset="UTF-8">
     <title>Analyse Temporelle des Mesures</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        #temporalChart {
-            box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-            background-color: #fff;
-            border-radius: 5px;
-            margin-top: 20px;
-            padding: 15px;
-        }
-        .chart-container {
-            position: relative;
-            margin: auto;
-            height: 50vh;
-            width: 90vw;
-        }
-    </style>
 </head>
 <body>
     <h1>Analyse Temporelle des Mesures</h1>
-    
-    <form id="filterForm">
-        Code du Site : <input type="text" name="code_site" placeholder="Code du site" required><br>
-        Polluant : <input type="text" name="polluant" placeholder="Polluant" required><br>
-        Date de début : <input type="date" name="date_debut" required><br>
-        Date de fin : <input type="date" name="date_fin" required><br>
-        <button type="button" onclick="applyFilters()">Appliquer les filtres</button>
+
+    <form id="filtresAnalyseTemporelle">
+        <label for="codeSite">Code du Site:</label>
+        <input type="text" id="codeSite" name="code_site">
+
+        <label for="polluant">Polluant:</label>
+        <input type="text" id="polluant" name="polluant">
+
+        <label for="dateDebut">Date de début:</label>
+        <input type="date" id="dateDebut" name="date_debut">
+
+        <label for="dateFin">Date de fin:</label>
+        <input type="date" id="dateFin" name="date_fin">
+
+        <button type="button" onclick="chargerDonnees()">Charger les données</button>
     </form>
-    
-    <div class="chart-container">
-        <canvas id="temporalChart"></canvas>
+
+    <div>
+        <canvas id="graphiqueAnalyseTemporelle"></canvas>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Laissez vide si aucun chargement initial n'est nécessaire
-        });
+        function chargerDonnees() {
+    const codeSite = document.getElementById('codeSite').value;
+    const polluant = document.getElementById('polluant').value;
+    const dateDebut = document.getElementById('dateDebut').value;
+    const dateFin = document.getElementById('dateFin').value;
 
-        function applyFilters() {
-            const form = document.getElementById('filterForm');
-            const codeSite = form.querySelector('input[name="code_site"]').value;
-            const polluant = form.querySelector('input[name="polluant"]').value;
-            const dateDebut = form.querySelector('input[name="date_debut"]').value;
-            const dateFin = form.querySelector('input[name="date_fin"]').value;
+    const url = `http://localhost:5000/api/analyse-temporelle?code_site=${codeSite}&polluant=${polluant}&date_debut=${dateDebut}&date_fin=${dateFin}`;
 
-            const queryParams = new URLSearchParams({
-                code_site: codeSite,
-                polluant: polluant,
-                date_debut: dateDebut,
-                date_fin: dateFin
-            }).toString();
-
-            fetch(`http://localhost:5000/api/analyse-temporelle?${queryParams}`)
+            fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    const labels = data.map(item => item.Date_Debut);
-                    const valeurs = data.map(item => item.Valeur);
-                    const ctx = document.getElementById('temporalChart').getContext('2d');
-                    updateChart(ctx, labels, valeurs);
+                    const labels = data.map(entry => entry.Date_Debut);
+                    const values = data.map(entry => entry.Valeur);
+
+                    const ctx = document.getElementById('graphiqueAnalyseTemporelle').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Valeur',
+                                data: values,
+                                fill: false,
+                                borderColor: 'rgb(75, 192, 192)',
+                                tension: 0.1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
                 })
-                .catch(error => {
-                    console.error('Erreur lors de la récupération des données:', error);
-                });
-        }
-
-        function updateChart(ctx, labels, valeurs) {
-            // Assurez-vous que le graphique précédent est détruit avant d'en créer un nouveau
-            if (window.temporalChart instanceof Chart) {
-                window.temporalChart.destroy();
-            }
-
-            window.temporalChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Valeur de Mesure',
-                        data: valeurs,
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                    }]
-                },
-                options: {
-                    scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                unit: 'day'
-                            },
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Valeur'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: true
-                        },
-                        title: {
-                            display: true,
-                            text: 'Analyse Temporelle des Mesures',
-                            font: {
-                                size: 20
-                            }
-                        }
-                    }
-                }
-            });
+                .catch(error => console.error('Erreur de chargement des données', error));
         }
     </script>
 </body>
